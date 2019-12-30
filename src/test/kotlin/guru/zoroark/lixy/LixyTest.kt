@@ -38,4 +38,66 @@ class LixyTest {
             }
         )
     }
+
+    @Test
+    fun `Lixy is able to lex multiple token types unlabeled state`() {
+        val ttdot = LixyTokenType()
+        val ttspace = LixyTokenType()
+        val tthello = LixyTokenType()
+        val lexer = lixy {
+            state {
+                "." isToken ttdot
+                " " isToken ttspace
+                "hello" isToken tthello
+            }
+        }
+        val tokens = lexer.tokenize("hello hello. hello..  ")
+        assertEquals(
+            tokens,
+            listOf(
+                LixyToken("hello", 0, 5, tthello),
+                LixyToken(" ", 5, 6, ttspace),
+                LixyToken("hello", 6, 11, tthello),
+                LixyToken(".", 11, 12, ttdot),
+                LixyToken(" ", 12, 13, ttspace),
+                LixyToken("hello", 13, 18, tthello),
+                LixyToken(".", 18, 19, ttdot),
+                LixyToken(".", 19, 20, ttdot),
+                LixyToken(" ", 20, 21, ttspace),
+                LixyToken(" ", 21, 22, ttspace)
+            )
+        )
+    }
+
+    @Test
+    fun `Lixy is able to parse some funny string patterns, v2`() {
+        val tttriple = LixyTokenType()
+        val ttpair = LixyTokenType()
+        val ttsingle = LixyTokenType()
+        val ttspace = LixyTokenType()
+        val lexer = lixy {
+            state {
+                "..." isToken tttriple
+                ".." isToken ttpair
+                "." isToken ttsingle
+                " " isToken ttspace
+            }
+        }
+
+        val tokens = lexer.tokenize("..... .. .... .")
+        assertEquals(
+            tokens,
+            listOf(
+                LixyToken("...", 0, 3, tttriple),
+                LixyToken("..", 3, 5, ttpair),
+                LixyToken(" ", 5, 6, ttspace),
+                LixyToken("..", 6, 8, ttpair),
+                LixyToken(" ", 8, 9, ttspace),
+                LixyToken("...", 9, 12, tttriple),
+                LixyToken(".", 12, 13, ttsingle),
+                LixyToken(" ", 13, 14, ttspace),
+                LixyToken(".", 14, 15, ttsingle)
+            )
+        )
+    }
 }
