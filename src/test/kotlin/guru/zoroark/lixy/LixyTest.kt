@@ -132,4 +132,67 @@ class LixyTest {
             )
         )
     }
+
+    @Test
+    fun `Lixy incoherent matcher results cause exception (start before index)`() {
+        val ttype = LixyTokenType()
+        val ttdot = LixyTokenType()
+        val lexer = lixy {
+            state {
+                +matcher { s, start ->
+                    if (start == 1)
+                        LixyToken(s[0].toString(), 0, 2, ttype)
+                    else
+                        null
+                }
+                "." isToken ttdot
+            }
+        }
+        val exc = assertFailsWith<LixyException> {
+            lexer.tokenize("...")
+        }
+        assertNotNull(exc.message)
+        assert(exc.message!!.contains("token starts"))
+    }
+
+    @Test
+    fun `Lixy incoherent matcher results cause exception (end is too far)`() {
+        val ttype = LixyTokenType()
+        val ttdot = LixyTokenType()
+        val lexer = lixy {
+            state {
+                +matcher { s, start ->
+                    if (start == s.length - 1) {
+                        LixyToken(
+                            s[start].toString(),
+                            s.length - 1,
+                            s.length + 1,
+                            ttype
+                        )
+                    } else {
+                        null
+                    }
+                }
+                "." isToken ttdot
+            }
+        }
+        val exc = assertFailsWith<LixyException> {
+            lexer.tokenize("....")
+        }
+        assertNotNull(exc.message)
+        assert(exc.message!!.contains("token ends"))
+    }
+
+    @Test
+    fun `Lixy no match fails`() {
+        val ttdot = LixyTokenType()
+        val lexer = lixy {
+            state {
+                "." isToken ttdot
+            }
+        }
+        assertFailsWith<LixyNoMatchException> {
+            lexer.tokenize("a")
+        }
+    }
 }
