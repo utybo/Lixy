@@ -11,3 +11,9 @@ fun lixy(body: LixyDslEnvironment.() -> Unit): LixyLexer {
     }
 
 }
+
+fun matcher(matcherBody: (s: String, startAt: Int) -> LixyToken?): LixyTokenMatcher =
+    object : LixyTokenMatcher {
+        override fun match(s: String, startAt: Int): LixyToken? =
+            matcherBody(s, startAt)
+    }

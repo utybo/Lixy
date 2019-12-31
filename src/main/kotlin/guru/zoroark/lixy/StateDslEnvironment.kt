@@ -12,4 +12,8 @@ class StateDslEnvironment : Buildable<LixyState> {
     infix fun String.isToken(token: LixyTokenType) {
         tokenMatchers += LixyStringTokenMatcher(this, token)
     }
+
+    operator fun LixyTokenMatcher.unaryPlus() {
+        tokenMatchers += this
+    }
 }

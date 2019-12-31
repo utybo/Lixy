@@ -100,4 +100,36 @@ class LixyTest {
             )
         )
     }
+
+    @Test
+    fun `Lixy supports custom matchers`() {
+        val ttype = LixyTokenType()
+        val ttdot = LixyTokenType()
+        val customMatcher = matcher { s, i ->
+            if (s[i] == 'e') {
+                LixyToken("e", i, i + 1, ttype)
+            } else {
+                null
+            }
+        }
+        val lexer = lixy {
+            state {
+                +customMatcher
+                "." isToken ttdot
+            }
+        }
+
+        val tokens = lexer.tokenize(".e..ee")
+        assertEquals(
+            tokens,
+            listOf(
+                LixyToken(".", 0, 1, ttdot),
+                LixyToken("e", 1, 2, ttype),
+                LixyToken(".", 2, 3, ttdot),
+                LixyToken(".", 3, 4, ttdot),
+                LixyToken("e", 4, 5, ttype),
+                LixyToken("e", 5, 6, ttype)
+            )
+        )
+    }
 }
