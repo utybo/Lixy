@@ -1,7 +1,7 @@
 package guru.zoroark.lixy
 
 data class LixyLexer(val states: List<LixyState>) {
-    val defaultState: LixyState
+    private val defaultState: LixyState
         get() = states[0]
 
     fun tokenize(s: String): List<LixyToken> {
@@ -25,7 +25,7 @@ data class LixyLexer(val states: List<LixyState>) {
                 else {
                     false
                 }
-            } ?: throw LixyException("No match for string starting at index $index")
+            } ?: throw LixyNoMatchException("No match for string starting at index $index")
         }
         return tokens
     }
