@@ -98,15 +98,15 @@ class LixyTest {
         assertEquals(
             tokens,
             listOf(
-                LixyToken("...", 0, 3, tttriple),
-                LixyToken("..", 3, 5, ttpair),
-                LixyToken(" ", 5, 6, ttspace),
-                LixyToken("..", 6, 8, ttpair),
-                LixyToken(" ", 8, 9, ttspace),
-                LixyToken("...", 9, 12, tttriple),
-                LixyToken(".", 12, 13, ttsingle),
-                LixyToken(" ", 13, 14, ttspace),
-                LixyToken(".", 14, 15, ttsingle)
+                LixyToken("...", 0, 3, tttriple), // 1
+                LixyToken("..", 3, 5, ttpair), // 2
+                LixyToken(" ", 5, 6, ttspace), // 3
+                LixyToken("..", 6, 8, ttpair), // 4
+                LixyToken(" ", 8, 9, ttspace), // 5
+                LixyToken("...", 9, 12, tttriple), // 6
+                LixyToken(".", 12, 13, ttsingle), // 7
+                LixyToken(" ", 13, 14, ttspace), // 8
+                LixyToken(".", 14, 15, ttsingle) // 9
             )
         )
     }
