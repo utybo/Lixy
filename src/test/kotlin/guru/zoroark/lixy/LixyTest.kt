@@ -5,6 +5,7 @@ import kotlin.test.*
 class LixyTest {
     @Test
     fun `Empty Lixy should crash`() {
+        // I mean, yeah, that lexer is not going to do anything
         assertFailsWith<LixyException> {
             lixy {}
         }
@@ -12,15 +13,18 @@ class LixyTest {
 
     @Test
     fun `Lixy constructs single unlabeled state`() {
+        // Should construct a single empty state
         val ret = lixy {
             state {}
         }
 
         assertEquals(ret.states.size, 1)
+        assert(ret.states[0].matchers.isEmpty())
     }
 
     @Test
     fun `Lixy is able to lex simple unlabeled state`() {
+        // Should construct a single state with a single matcher
         val simpleStateDot = LixyTokenType()
         val lexer = lixy {
             state {
@@ -28,6 +32,8 @@ class LixyTest {
             }
         }
         val tokens = lexer.tokenize("....")
+        assertEquals(lexer.states.size, 1)
+        assertEquals(lexer.states[0].matchers.size, 1)
         assertEquals(
             tokens,
             (0 until 4).map { i ->
@@ -41,6 +47,7 @@ class LixyTest {
 
     @Test
     fun `Lixy is able to lex multiple token types unlabeled state`() {
+        // Should successfully lex with a single more complex state
         val ttdot = LixyTokenType()
         val ttspace = LixyTokenType()
         val tthello = LixyTokenType()
@@ -71,6 +78,9 @@ class LixyTest {
 
     @Test
     fun `Lixy is able to parse some funny string patterns, v2`() {
+        // Additional testing, specifically because lexing tests are supposed
+        // to be done sequentially (i.e. check for the first pattern, then the
+        // second, etc.)
         val tttriple = LixyTokenType()
         val ttpair = LixyTokenType()
         val ttsingle = LixyTokenType()
@@ -83,7 +93,7 @@ class LixyTest {
                 " " isToken ttspace
             }
         }
-
+        //                           111223445666789
         val tokens = lexer.tokenize("..... .. .... .")
         assertEquals(
             tokens,
@@ -103,6 +113,7 @@ class LixyTest {
 
     @Test
     fun `Lixy supports custom matchers`() {
+        // ttype will be the type returned by our custom matcher
         val ttype = LixyTokenType()
         val ttdot = LixyTokenType()
         val customMatcher = matcher { s, i ->
@@ -135,14 +146,19 @@ class LixyTest {
 
     @Test
     fun `Lixy incoherent matcher results cause exception (start before index)`() {
+        // Our token types
         val ttype = LixyTokenType()
         val ttdot = LixyTokenType()
         val lexer = lixy {
             state {
+                // Erroneous matcher
                 +matcher { s, start ->
                     if (start == 1)
+                        // The second character returns a token that starts
+                        // on the very first character, which is a big no-no
                         LixyToken(s[0].toString(), 0, 2, ttype)
                     else
+                        // Returning null to signal no match
                         null
                 }
                 "." isToken ttdot

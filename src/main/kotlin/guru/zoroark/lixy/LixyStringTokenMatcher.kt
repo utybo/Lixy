@@ -1,5 +1,10 @@
 package guru.zoroark.lixy
 
+/**
+ * Implementation of a [LixyTokenMatcher] that attempts to match against a
+ * given string exactly. It will return a token with the given token type if
+ * such a match is found.
+ */
 class LixyStringTokenMatcher(val match: String, val tokenType: LixyTokenType) :
     LixyTokenMatcher {
     override fun match(s: String, startAt: Int): LixyToken? {
