@@ -154,11 +154,11 @@ class LixyTest {
                 // Erroneous matcher
                 +matcher { s, start ->
                     if (start == 1)
-                        // The second character returns a token that starts
-                        // on the very first character, which is a big no-no
+                    // The second character returns a token that starts
+                    // on the very first character, which is a big no-no
                         LixyToken(s[0].toString(), 0, 2, ttype)
                     else
-                        // Returning null to signal no match
+                    // Returning null to signal no match
                         null
                 }
                 "." isToken ttdot
@@ -210,5 +210,23 @@ class LixyTest {
         assertFailsWith<LixyNoMatchException> {
             lexer.tokenize("a")
         }
+    }
+
+    @Test
+    fun `Lixy supports regex`() {
+        val ttregex = LixyTokenType()
+        val lexer = lixy {
+            state {
+                matches("(abc){2}") isToken ttregex
+            }
+        }
+        val result = lexer.tokenize("abcabcabcabc")
+        assertEquals(
+            listOf(
+                LixyToken("abcabc", 0, 6, ttregex),
+                LixyToken("abcabc", 6, 12, ttregex)
+            ),
+            result
+        )
     }
 }

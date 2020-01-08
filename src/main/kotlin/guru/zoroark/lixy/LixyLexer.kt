@@ -29,6 +29,8 @@ data class LixyLexer(val states: List<LixyState>) {
                 // Attempt to match
                 matcher.match(s, index)?.let { match ->
                     when {
+                        match.string.length > match.endsAt - match.startsAt ->
+                            throw LixyException("Returned token string (${match.string}) is too large for the given range (${match.startsAt}-${match.endsAt})")
                         match.startsAt < index ->
                             throw LixyException("Incoherent indices: matcher ${matcher.javaClass.simpleName} says the token starts at ${match.startsAt} when the current index is $index")
                         match.endsAt > s.length ->
@@ -41,7 +43,7 @@ data class LixyLexer(val states: List<LixyState>) {
                     }
                 } ?: false
             }   // firstOrNull returned null: throw an exception, nothing
-                // matched
+            // matched
                 ?: throw LixyNoMatchException("No match for string starting at index $index")
         }
         return tokens

@@ -1,5 +1,7 @@
 package guru.zoroark.lixy
 
+import java.util.regex.Pattern
+
 /**
  * This classed is used to build a lexer state ([LixyState]) using a DSL, and
  * is used inside a lambda-with received. It also defines high level functions
@@ -30,5 +32,12 @@ class StateDslEnvironment : Buildable<LixyState> {
      */
     operator fun LixyTokenMatcher.unaryPlus() {
         tokenMatchers += this
+    }
+
+    fun matches(regex: String): LixyTokenRecognizer =
+        RegexPatternRecognizer(Pattern.compile(regex))
+
+    infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType) {
+        tokenMatchers += LixyMatchedTokenRecognizer(this, tokenType)
     }
 }
