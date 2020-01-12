@@ -1,4 +1,4 @@
-# Lixy, the lexer with a beautiful Kotlin DSL
+# [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy, the lexer with a beautiful Kotlin DSL
 
 WIP
 
