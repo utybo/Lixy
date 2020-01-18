@@ -3,6 +3,7 @@ package guru.zoroark.lixy
 import kotlin.test.*
 
 class LixyTest {
+
     @Test
     fun `Empty Lixy should crash`() {
         // I mean, yeah, that lexer is not going to do anything
@@ -25,7 +26,7 @@ class LixyTest {
     @Test
     fun `Lixy is able to lex simple unlabeled state`() {
         // Should construct a single state with a single matcher
-        val simpleStateDot = LixyTokenType()
+        val simpleStateDot = tokenType()
         val lexer = lixy {
             state {
                 "." isToken simpleStateDot
@@ -48,9 +49,9 @@ class LixyTest {
     @Test
     fun `Lixy is able to lex multiple token types unlabeled state`() {
         // Should successfully lex with a single more complex state
-        val ttdot = LixyTokenType()
-        val ttspace = LixyTokenType()
-        val tthello = LixyTokenType()
+        val ttdot = tokenType()
+        val ttspace = tokenType()
+        val tthello = tokenType()
         val lexer = lixy {
             state {
                 "." isToken ttdot
@@ -81,10 +82,10 @@ class LixyTest {
         // Additional testing, specifically because lexing tests are supposed
         // to be done sequentially (i.e. check for the first pattern, then the
         // second, etc.)
-        val tttriple = LixyTokenType()
-        val ttpair = LixyTokenType()
-        val ttsingle = LixyTokenType()
-        val ttspace = LixyTokenType()
+        val tttriple = tokenType()
+        val ttpair = tokenType()
+        val ttsingle = tokenType()
+        val ttspace = tokenType()
         val lexer = lixy {
             state {
                 "..." isToken tttriple
@@ -114,8 +115,8 @@ class LixyTest {
     @Test
     fun `Lixy supports custom matchers`() {
         // ttype will be the type returned by our custom matcher
-        val ttype = LixyTokenType()
-        val ttdot = LixyTokenType()
+        val ttype = tokenType()
+        val ttdot = tokenType()
         val customMatcher = matcher { s, i ->
             if (s[i] == 'e') {
                 LixyToken("e", i, i + 1, ttype)
@@ -147,8 +148,8 @@ class LixyTest {
     @Test
     fun `Lixy incoherent matcher results cause exception (start before index)`() {
         // Our token types
-        val ttype = LixyTokenType()
-        val ttdot = LixyTokenType()
+        val ttype = tokenType()
+        val ttdot = tokenType()
         val lexer = lixy {
             state {
                 // Erroneous matcher
@@ -173,8 +174,8 @@ class LixyTest {
 
     @Test
     fun `Lixy incoherent matcher results cause exception (end is too far)`() {
-        val ttype = LixyTokenType()
-        val ttdot = LixyTokenType()
+        val ttype = tokenType()
+        val ttdot = tokenType()
         val lexer = lixy {
             state {
                 +matcher { s, start ->
@@ -201,7 +202,7 @@ class LixyTest {
 
     @Test
     fun `Lixy no match fails`() {
-        val ttdot = LixyTokenType()
+        val ttdot = tokenType()
         val lexer = lixy {
             state {
                 "." isToken ttdot
@@ -214,7 +215,7 @@ class LixyTest {
 
     @Test
     fun `Lixy supports regex`() {
-        val ttregex = LixyTokenType()
+        val ttregex = tokenType()
         val lexer = lixy {
             state {
                 matches("(abc){2}") isToken ttregex
@@ -227,6 +228,48 @@ class LixyTest {
                 LixyToken("abcabc", 6, 12, ttregex)
             ),
             result
+        )
+    }
+
+    @Test
+    fun `Lixy anyOf crashes if no provided arguments`() {
+        val tokenType = tokenType()
+        val exc = assertFailsWith<LixyException> {
+            lixy {
+                state {
+                    anyOf() isToken tokenType
+                }
+            }
+        }
+        assertNotNull(exc.message)
+        assert(exc.message!!.contains("anyOf") && exc.message!!.contains("at least one"))
+    }
+
+    @Test
+    fun `Lixy supports anyOf multistring matcher`() {
+        val basicTokenType = tokenType()
+        val multiTokenType = tokenType()
+        val lexer = lixy {
+            state {
+                " " isToken basicTokenType
+                anyOf("a", "b", "d", "z") isToken multiTokenType
+            }
+        }
+        val tokens = lexer.tokenize("a bz d bdz")
+        assertEquals(
+            listOf(
+                LixyToken("a", 0, 1, multiTokenType),
+                LixyToken(" ", 1, 2, basicTokenType),
+                LixyToken("b", 2, 3, multiTokenType),
+                LixyToken("z", 3, 4, multiTokenType),
+                LixyToken(" ", 4, 5, basicTokenType),
+                LixyToken("d", 5, 6, multiTokenType),
+                LixyToken(" ", 6, 7, basicTokenType),
+                LixyToken("b", 7, 8, multiTokenType),
+                LixyToken("d", 8, 9, multiTokenType),
+                LixyToken("z", 9, 10, multiTokenType)
+            ),
+            tokens
         )
     }
 }

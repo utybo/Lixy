@@ -37,7 +37,26 @@ class StateDslEnvironment : Buildable<LixyState> {
     fun matches(regex: String): LixyTokenRecognizer =
         RegexPatternRecognizer(Pattern.compile(regex))
 
+    /**
+     * Add a matcher that attempts to match against the given recognizer,
+     * returning a token with the given token type in case of a successfully
+     * recognized substring.. The exact pattern that is recognized is entirely
+     * up to the recognizer.
+     */
     infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType) {
         tokenMatchers += LixyMatchedTokenRecognizer(this, tokenType)
     }
+
+    /**
+     * Crate a recognizer that recognizes any of the strings provided as
+     * parameters.
+     *
+     * @param s Strings that should be recognized
+     * @return A string recognizer. Use [isToken] to make it a usable matcher.
+     */
+    fun anyOf(vararg s: String): LixyTokenRecognizer =
+        if(s.isEmpty())
+            throw LixyException("anyOf() must have at least one string argument")
+        else
+            LixyStringSetTokenRecognizer(s.asList())
 }
