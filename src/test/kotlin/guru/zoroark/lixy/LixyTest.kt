@@ -233,6 +233,52 @@ class LixyTest {
     }
 
     @Test
+    fun `Lixy supports transparent look-behind in regex`() {
+        val ttregex = tokenType()
+        val ttype = tokenType()
+        val lexer = lixy {
+            state {
+                "a" isToken ttype
+                matches("(?<=a)b") isToken ttregex
+                "b" isToken ttype
+            }
+        }
+        val result = lexer.tokenize("abb")
+        assertEquals(
+            listOf(
+                LixyToken("a", 0, 1, ttype),
+                LixyToken("b", 1, 2, ttregex),
+                LixyToken("b", 2, 3, ttype)
+            ),
+            result
+        )
+    }
+
+    @Test
+    fun `Lixy regex matches start and end of string as real start and end`() {
+        val ttregex = tokenType()
+        val ttype = tokenType()
+        val lexer = lixy {
+            state {
+                matches("^a") isToken ttregex
+                "a" isToken ttype
+                matches("b$") isToken ttregex
+                "b" isToken ttype
+            }
+        }
+        val result = lexer.tokenize("aabb")
+        assertEquals(
+            listOf(
+                LixyToken("a", 0, 1, ttregex),
+                LixyToken("a", 1, 2, ttype),
+                LixyToken("b", 2, 3, ttype),
+                LixyToken("b", 3, 4, ttregex)
+            ),
+            result
+        )
+    }
+
+    @Test
     fun `Lixy anyOf crashes if no provided arguments`() {
         val tokenType =
             tokenType()
