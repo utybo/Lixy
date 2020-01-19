@@ -18,10 +18,15 @@ jobs:
     - name: Test with gradle
       run: ./gradlew check
     - name: Code Climate upload test coverage
-      uses: paambaati/codeclimate-action@v2.4.0
       env:
         CC_TEST_REPORTER_ID: 426a8cba7a9651be2761a6f78bd46e622c0c4e2dd7d611e21b57154ff97ba5cc
-      with:
-        # Coverage command to execute
-        coverageCommand: ./gradlew test jacocoTestReport
-        coverageLocations: "./build/reports/jacoco/test/jacocoTestReport.xml:jacoco"
+        JACOCO_SOURCE_PATH: src/main/kotlin
+      run: |
+        export GIT_COMMIT_SHA=${GITHUB_SHA}
+        export GIT_BRANCH=${GITHUB_REF}
+        wget -O cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+        chmod +x cc-test-reporter
+        ./cc-test-reporter before-build
+        ./gradlew test jacocoTestReport
+        ./cc-test-reporter format-coverage build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
+        ./cc-test-reporter upload-coverage
