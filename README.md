@@ -1,6 +1,6 @@
 # [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy, the lexer with a beautiful Kotlin DSL
 
-[![Actions Status](https://img.shields.io/github/workflow/status/utybo/Lixy/Tests?style=for-the-badge&logo=github&label=tests)](https://github.com/utybo/Lixy/actions) ![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blue?logo=Kotlin&style=for-the-badge) ![Experimental](https://img.shields.io/badge/Stage-Experimental-red?style=for-the-badge)
+[![Actions Status](https://img.shields.io/github/workflow/status/utybo/Lixy/Tests?style=for-the-badge&logo=github&label=tests)](https://github.com/utybo/Lixy/actions) ![Code Climate coverage](https://img.shields.io/codeclimate/coverage/utybo/Lixy?style=for-the-badge) ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/utybo/Lixy?style=for-the-badge) ![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blue?logo=Kotlin&style=for-the-badge) ![Experimental](https://img.shields.io/badge/Stage-Experimental-red?style=for-the-badge)
 
 WIP
 
