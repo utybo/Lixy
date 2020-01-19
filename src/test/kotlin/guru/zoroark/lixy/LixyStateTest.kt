@@ -39,8 +39,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy fails to construct labeled default then unlabeled`()
-    {
+    fun `Lixy fails to construct labeled default then unlabeled`() {
         val ttype = tokenType()
         assertFailsWith<LixyException> {
             lixy {

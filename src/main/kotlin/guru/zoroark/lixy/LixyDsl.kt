@@ -16,7 +16,7 @@ fun lixy(body: LixyDslEnvironment.() -> Unit): LixyLexer {
     val dslEnv = LixyDslEnvironment()
     body(dslEnv)
     return dslEnv.build().also {
-        if (it.states.isEmpty())
+        if (it.statesCount == 0)
             throw LixyException("Empty body is not allowed. Need help? Visit $LIXY_WEBSITE")
     }
 

@@ -19,7 +19,7 @@ class LixyTest {
             state {}
         }
 
-        assertEquals(ret.states.size, 1)
+        assertEquals(ret.statesCount, 1)
         assert(ret.defaultState.matchers.isEmpty())
     }
 
@@ -34,7 +34,7 @@ class LixyTest {
             }
         }
         val tokens = lexer.tokenize("....")
-        assertEquals(lexer.states.size, 1)
+        assertEquals(lexer.statesCount, 1)
         assertEquals(lexer.defaultState.matchers.size, 1)
         assertEquals(
             tokens,
