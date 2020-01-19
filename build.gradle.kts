@@ -46,3 +46,9 @@ tasks {
 
     }
 }
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+    }
+}
