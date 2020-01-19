@@ -23,7 +23,7 @@ jobs:
         JACOCO_SOURCE_PATH: src/main/kotlin
       run: |
         export GIT_COMMIT_SHA=${GITHUB_SHA}
-        export GIT_BRANCH=${GITHUB_REF}
+        export GIT_BRANCH=${GITHUB_REF#refs/heads/}
         wget -O cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
         chmod +x cc-test-reporter
         ./cc-test-reporter before-build
