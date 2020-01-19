@@ -55,6 +55,9 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
             }
         }
 
+    infix fun LixyStateLabel.state(body: LixyDslStateEnvironment.() -> Unit): Unit =
+        createLabeledState(this, body)
+
     /**
      * Utility class whose only role is to allow the default state construct.
      * (`default state { ... }`).
@@ -66,6 +69,15 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         infix fun state(body: LixyDslStateEnvironment.() -> Unit) =
             this@LixyDslEnvironment.createLabeledState(null, body)
     }
+
+    /**
+     * DSL construct that allows you to directly create a default state.
+     * Use it like this: `default state { ... }`
+     *
+     * The only use for this property is for its
+     * [state][StateInfixCreator.state] function.
+     */
+    val default = StateInfixCreator()
 
     /**
      * Utility function that actually performs the addition of labeled states
@@ -86,14 +98,6 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         }
     }
 
-    /**
-     * DSL construct that allows you to directly create a default state.
-     * Use it like this: `default state { ... }`
-     *
-     * The only use for this property is for its
-     * [state][StateInfixCreator.state] function.
-     */
-    val default = StateInfixCreator()
 
     override fun build(): LixyLexer {
         return LixyLexer(
