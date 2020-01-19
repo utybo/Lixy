@@ -24,3 +24,4 @@ jobs:
       with:
         # Coverage command to execute
        coverageCommand: ./gradlew test jacocoTestReport
+       coverageLocations: ["./build/reports/jacoco/test/jacocoTestReport.xml:jacoco"]
