@@ -18,13 +18,8 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
      * States being constructed are stored here and are only actually
      * constructed when [build] is called.
      */
-    private val constructedStates: MutableList<StateDslEnvironment> =
-        mutableListOf()
-
-    /**
-     * Index of the default state in the [constructedStates] list.
-     */
-    private var defaultStateIndex: Int? = null
+    private val constructedStates: MutableMap<LixyStateLabel?, StateDslEnvironment> =
+        mutableMapOf()
 
     /**
      * Create a state using a high-level DSL and add it to this object.
@@ -37,8 +32,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         if (stateful == false)
             throw LixyException("Cannot create multiple unlabeled states. Try adding labels to your states, or using only one state.")
         stateful = false
-        constructedStates += StateDslEnvironment().apply(body)
-        defaultStateIndex = 0
+        constructedStates[null] = StateDslEnvironment().apply(body)
     }
 
     /**
@@ -62,12 +56,12 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
     ) {
         if (stateful == false)
             throw LixyException("Cannot create a labeled state in a single-state context. You cannot mix labeled states and unlabeled states.")
-        if (label == null && defaultStateIndex != null)
+        if (label == null && constructedStates.containsKey(null))
             throw LixyException("Cannot create two default states. A null label implies that the state is the default state. Use a label for one of the default states or merge both states.")
+        if (constructedStates.containsKey(label))
+            throw LixyException("Cannot create two states with the same label. Use a different label so that all states have distinct labels.")
         stateful = true
-        constructedStates += StateDslEnvironment().apply(body)
-        if (label == null)
-            defaultStateIndex = constructedStates.size - 1
+        constructedStates[label] = StateDslEnvironment().apply(body)
     }
 
     /**
@@ -81,7 +75,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
 
     override fun build(): LixyLexer {
         return LixyLexer(
-            states = constructedStates.map { it.build() }
+            states = constructedStates.mapValues { (_, v) -> v.build() }
         )
     }
 }

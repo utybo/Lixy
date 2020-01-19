@@ -6,7 +6,7 @@ package guru.zoroark.lixy
  * such a match is found.
  */
 class LixyStringTokenMatcher(val match: String, val tokenType: LixyTokenType) :
-    LixyTokenMatcher {
+    LixyTokenMatcher() {
     override fun match(s: String, startAt: Int): LixyToken? {
         if (startAt + match.length > s.length) {
             return null // Cannot match (match goes beyond s boundaries)

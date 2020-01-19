@@ -5,7 +5,7 @@ package guru.zoroark.lixy
  * offset matches some pattern. The matcher then returns a corresponding token
  * or null if no match is found.
  */
-interface LixyTokenMatcher {
+abstract class LixyTokenMatcher {
     /**
      * This function determines whether the string [s], starting at the index
      * [startAt] (inclusive), matches some pattern. The exact pattern is
@@ -16,5 +16,5 @@ interface LixyTokenMatcher {
      * @return Null if no match is possible, or a [LixyToken] that corresponds
      * to the matched substring.
      */
-    fun match(s: String, startAt: Int): LixyToken?
+    abstract fun match(s: String, startAt: Int): LixyToken?
 }

@@ -8,9 +8,13 @@ package guru.zoroark.lixy
  *
  * The function [tokenize] can be used to use the lexer on a string
  */
-data class LixyLexer(val states: List<LixyState>) {
-    private val defaultState: LixyState
-        get() = states[0]
+data class LixyLexer(val states: Map<LixyStateLabel?, LixyState>) {
+    /**
+     * The default state in the case of a multi labeled state lexer, or the
+     * only state of the lexer in the case of a single unlabeled state lexer
+     */
+    val defaultState: LixyState
+        get() = states[null] ?: error("No default state in lexer")
 
     /**
      * The tokenize method will turn a string into a list of tokens based on
@@ -42,7 +46,8 @@ data class LixyLexer(val states: List<LixyState>) {
                         }
                     }
                 } ?: false
-            }   // firstOrNull returned null: throw an exception, nothing
+            }
+            // firstOrNull returned null: throw an exception, nothing
             // matched
                 ?: throw LixyNoMatchException("No match for string starting at index $index")
         }
