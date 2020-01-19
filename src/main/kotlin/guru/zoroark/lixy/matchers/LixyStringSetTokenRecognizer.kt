@@ -1,4 +1,6 @@
-package guru.zoroark.lixy
+package guru.zoroark.lixy.matchers
+
+import guru.zoroark.lixy.LixyException
 
 /**
  * A [LixyStringSetTokenRecognizer] is a [LixyTokenRecognizer] specifically
@@ -11,7 +13,7 @@ package guru.zoroark.lixy
  * fairly efficient recognizer.
  *
  * These recognizers should be created using the
- * [anyOf][StateDslEnvironment.anyOf] DSL function.
+ * [anyOf][LixyDslStateEnvironment.anyOf] DSL function.
  */
 class LixyStringSetTokenRecognizer(stringsToRecognize: List<String>) :
     LixyTokenRecognizer {
@@ -21,7 +23,9 @@ class LixyStringSetTokenRecognizer(stringsToRecognize: List<String>) :
         val c = HashMap<Int, HashSet<String>>()
         stringsToRecognize.forEach {
             val x = c.getOrPut(it.length) { HashSet() }
-            if (!x.add(it)) throw LixyException("Duplicate element in multi-string recognizer initialization")
+            if (!x.add(it)) throw LixyException(
+                "Duplicate element in multi-string recognizer initialization"
+            )
         }
         criteria = c
     }

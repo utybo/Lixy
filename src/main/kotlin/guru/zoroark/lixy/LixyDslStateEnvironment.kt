@@ -1,5 +1,8 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.*
+import guru.zoroark.lixy.matchers.LixyMatchedTokenRecognizer
+import guru.zoroark.lixy.matchers.RegexPatternRecognizer
 import java.util.regex.Pattern
 
 /**
@@ -10,7 +13,7 @@ import java.util.regex.Pattern
  * Matchers are constructed immediately, but states themselves are only
  * constructed when calling [build].
  */
-class StateDslEnvironment : Buildable<LixyState> {
+class LixyDslStateEnvironment : Buildable<LixyState> {
     private val tokenMatchers = mutableListOf<LixyTokenMatcher>()
 
     override fun build(): LixyState {
@@ -24,7 +27,10 @@ class StateDslEnvironment : Buildable<LixyState> {
      * returning a token with the given token type in case of a match
      */
     infix fun String.isToken(token: LixyTokenType) {
-        tokenMatchers += LixyStringTokenMatcher(this, token)
+        tokenMatchers += LixyStringTokenMatcher(
+            this,
+            token
+        )
     }
 
     /**
@@ -35,7 +41,9 @@ class StateDslEnvironment : Buildable<LixyState> {
     }
 
     fun matches(regex: String): LixyTokenRecognizer =
-        RegexPatternRecognizer(Pattern.compile(regex))
+        RegexPatternRecognizer(
+            Pattern.compile(regex)
+        )
 
     /**
      * Add a matcher that attempts to match against the given recognizer,
@@ -44,7 +52,10 @@ class StateDslEnvironment : Buildable<LixyState> {
      * up to the recognizer.
      */
     infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType) {
-        tokenMatchers += LixyMatchedTokenRecognizer(this, tokenType)
+        tokenMatchers += LixyMatchedTokenRecognizer(
+            this,
+            tokenType
+        )
     }
 
     /**
@@ -58,5 +69,7 @@ class StateDslEnvironment : Buildable<LixyState> {
         if(s.isEmpty())
             throw LixyException("anyOf() must have at least one string argument")
         else
-            LixyStringSetTokenRecognizer(s.asList())
+            LixyStringSetTokenRecognizer(
+                s.asList()
+            )
 }

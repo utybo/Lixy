@@ -1,5 +1,7 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.LixyTokenMatcher
+
 /**
  * URL to the website of Lixy. Please change this if you fork this project!
  */

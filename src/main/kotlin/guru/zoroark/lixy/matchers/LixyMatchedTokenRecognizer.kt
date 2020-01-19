@@ -1,4 +1,7 @@
-package guru.zoroark.lixy
+package guru.zoroark.lixy.matchers
+
+import guru.zoroark.lixy.LixyToken
+import guru.zoroark.lixy.LixyTokenType
 
 internal class LixyMatchedTokenRecognizer(
     val recognizer: LixyTokenRecognizer,
@@ -6,7 +9,12 @@ internal class LixyMatchedTokenRecognizer(
 ) : LixyTokenMatcher() {
     override fun match(s: String, startAt: Int): LixyToken? =
         recognizer.recognize(s, startAt)?.let { (recognizedSubstring, endsAt) ->
-            LixyToken(recognizedSubstring, startAt, endsAt, tokenType)
+            LixyToken(
+                recognizedSubstring,
+                startAt,
+                endsAt,
+                tokenType
+            )
         }
 
 }

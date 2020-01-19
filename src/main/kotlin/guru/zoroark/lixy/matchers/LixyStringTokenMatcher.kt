@@ -1,4 +1,7 @@
-package guru.zoroark.lixy
+package guru.zoroark.lixy.matchers
+
+import guru.zoroark.lixy.LixyToken
+import guru.zoroark.lixy.LixyTokenType
 
 /**
  * Implementation of a [LixyTokenMatcher] that attempts to match against a

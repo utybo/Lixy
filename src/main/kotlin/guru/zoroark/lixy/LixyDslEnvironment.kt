@@ -35,7 +35,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
      * States being constructed are stored here and are only actually
      * constructed when [build] is called.
      */
-    private val constructedStates: MutableMap<LixyStateLabel?, StateDslEnvironment> =
+    private val constructedStates: MutableMap<LixyStateLabel?, LixyDslStateEnvironment> =
         mutableMapOf()
 
     /**
@@ -43,7 +43,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
      * The state is not constructed immediately and is only constructed when
      * [build] is called.
      */
-    fun state(body: StateDslEnvironment.() -> Unit): Unit =
+    fun state(body: LixyDslStateEnvironment.() -> Unit): Unit =
         when (lexerKind) {
             Kind.LABELED_STATES ->
                 throw LixyException("Cannot create an unlabeled state in a stateful context. You cannot mix labeled states and unlabeled states.")
@@ -51,7 +51,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
                 throw LixyException("Cannot create multiple unlabeled states. Try adding labels to your states, or using only one state.")
             Kind.UNDETERMINED -> {
                 lexerKind = Kind.SINGLE_STATE
-                constructedStates[null] = StateDslEnvironment().apply(body)
+                constructedStates[null] = LixyDslStateEnvironment().apply(body)
             }
         }
 
@@ -63,7 +63,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         /**
          * Create a state.
          */
-        infix fun state(body: StateDslEnvironment.() -> Unit) =
+        infix fun state(body: LixyDslStateEnvironment.() -> Unit) =
             this@LixyDslEnvironment.createLabeledState(null, body)
     }
 
@@ -72,7 +72,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
      */
     private fun createLabeledState(
         label: LixyStateLabel?,
-        body: StateDslEnvironment.() -> Unit
+        body: LixyDslStateEnvironment.() -> Unit
     ): Unit = when {
         lexerKind == Kind.SINGLE_STATE ->
             throw LixyException("Cannot create a labeled state in a single-state context. You cannot mix labeled states and unlabeled states.")
@@ -82,7 +82,7 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
             throw LixyException("Cannot create two states with the same label. Use a different label so that all states have distinct labels.")
         else -> {
             lexerKind = Kind.LABELED_STATES
-            constructedStates[label] = StateDslEnvironment().apply(body)
+            constructedStates[label] = LixyDslStateEnvironment().apply(body)
         }
     }
 

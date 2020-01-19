@@ -10,10 +10,12 @@ interface LixyTokenType
  * Big lexers should be using an enum which implements [LixyTokenType] instead
  * of [tokenType] and [LixyGenericTokenType].
  */
-class LixyGenericTokenType : LixyTokenType
+class LixyGenericTokenType :
+    LixyTokenType
 
 /**
  * Creates a new, distinct token type and returns it. The returned token type is
  * of the type [LixyGenericTokenType]
  */
-fun tokenType(): LixyGenericTokenType = LixyGenericTokenType()
+fun tokenType(): LixyGenericTokenType =
+    LixyGenericTokenType()

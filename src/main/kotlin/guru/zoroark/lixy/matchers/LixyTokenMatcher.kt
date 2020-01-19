@@ -1,4 +1,6 @@
-package guru.zoroark.lixy
+package guru.zoroark.lixy.matchers
+
+import guru.zoroark.lixy.LixyToken
 
 /**
  * A token matcher is an object that can determine whether a string at a given

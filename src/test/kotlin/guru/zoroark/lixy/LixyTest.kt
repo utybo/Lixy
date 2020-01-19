@@ -26,7 +26,8 @@ class LixyTest {
     @Test
     fun `Lixy is able to lex simple unlabeled state`() {
         // Should construct a single state with a single matcher
-        val simpleStateDot = tokenType()
+        val simpleStateDot =
+            tokenType()
         val lexer = lixy {
             state {
                 "." isToken simpleStateDot
@@ -233,7 +234,8 @@ class LixyTest {
 
     @Test
     fun `Lixy anyOf crashes if no provided arguments`() {
-        val tokenType = tokenType()
+        val tokenType =
+            tokenType()
         val exc = assertFailsWith<LixyException> {
             lixy {
                 state {
@@ -247,8 +249,10 @@ class LixyTest {
 
     @Test
     fun `Lixy supports anyOf multistring matcher`() {
-        val basicTokenType = tokenType()
-        val multiTokenType = tokenType()
+        val basicTokenType =
+            tokenType()
+        val multiTokenType =
+            tokenType()
         val lexer = lixy {
             state {
                 " " isToken basicTokenType
