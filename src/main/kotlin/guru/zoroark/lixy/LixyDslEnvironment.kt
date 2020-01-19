@@ -7,12 +7,29 @@ package guru.zoroark.lixy
  */
 class LixyDslEnvironment : Buildable<LixyLexer> {
     /**
-     * Indicates whether the lexer being built is stateful (multiple labeled
-     * states with a default state, then stateful == true), stateless (single
-     * unlabeled state, then stateful == false), or not determined yet (then
-     * stateful == false)
+     * An enum that represents the different kinds of lexers that can be built
      */
-    private var stateful: Boolean? = null
+    private enum class Kind {
+        /**
+         * A lexer that uses exactly one default state and zero or more other
+         * labeled states
+         */
+        LABELED_STATES,
+        /**
+         * A lexer that uses exactly one unlabeled state
+         */
+        SINGLE_STATE,
+        /**
+         * Used when the kind of lexer is not known yet
+         */
+        UNDETERMINED
+    }
+
+    /**
+     * Indicates whether the kind of lexer that is being built. Refer to [Kind]'s
+     * KDoc for more details
+     */
+    private var lexerKind: Kind = Kind.UNDETERMINED
 
     /**
      * States being constructed are stored here and are only actually
@@ -26,14 +43,17 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
      * The state is not constructed immediately and is only constructed when
      * [build] is called.
      */
-    fun state(body: StateDslEnvironment.() -> Unit) {
-        if (stateful == true)
-            throw LixyException("Cannot create an unlabeled state in a stateful context. You cannot mix labeled states and unlabeled states.")
-        if (stateful == false)
-            throw LixyException("Cannot create multiple unlabeled states. Try adding labels to your states, or using only one state.")
-        stateful = false
-        constructedStates[null] = StateDslEnvironment().apply(body)
-    }
+    fun state(body: StateDslEnvironment.() -> Unit): Unit =
+        when (lexerKind) {
+            Kind.LABELED_STATES ->
+                throw LixyException("Cannot create an unlabeled state in a stateful context. You cannot mix labeled states and unlabeled states.")
+            Kind.SINGLE_STATE ->
+                throw LixyException("Cannot create multiple unlabeled states. Try adding labels to your states, or using only one state.")
+            Kind.UNDETERMINED -> {
+                lexerKind = Kind.SINGLE_STATE
+                constructedStates[null] = StateDslEnvironment().apply(body)
+            }
+        }
 
     /**
      * Utility class whose only role is to allow the default state construct.
@@ -53,15 +73,17 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
     private fun createLabeledState(
         label: LixyStateLabel?,
         body: StateDslEnvironment.() -> Unit
-    ) {
-        if (stateful == false)
+    ): Unit = when {
+        lexerKind == Kind.SINGLE_STATE ->
             throw LixyException("Cannot create a labeled state in a single-state context. You cannot mix labeled states and unlabeled states.")
-        if (label == null && constructedStates.containsKey(null))
+        label == null && constructedStates.containsKey(null) ->
             throw LixyException("Cannot create two default states. A null label implies that the state is the default state. Use a label for one of the default states or merge both states.")
-        if (constructedStates.containsKey(label))
+        constructedStates.containsKey(label) ->
             throw LixyException("Cannot create two states with the same label. Use a different label so that all states have distinct labels.")
-        stateful = true
-        constructedStates[label] = StateDslEnvironment().apply(body)
+        else -> {
+            lexerKind = Kind.LABELED_STATES
+            constructedStates[label] = StateDslEnvironment().apply(body)
+        }
     }
 
     /**
