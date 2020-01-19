@@ -4,9 +4,12 @@
  * This generated file contains a sample Kotlin library project to get you started.
  */
 
+import org.jetbrains.dokka.gradle.DokkaTask
+
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.3.41"
+    id("org.jetbrains.kotlin.jvm") version "1.3.60"
+    id("org.jetbrains.dokka") version "0.10.0"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -30,4 +33,15 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+}
+
+tasks {
+    val dokka by getting(DokkaTask::class) {
+        outputFormat = "html"
+        outputDirectory = "$buildDir/dokka"
+        configuration {
+            includes = listOf("kdoc.md")
+        }
+
+    }
 }
