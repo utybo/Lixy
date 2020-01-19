@@ -16,4 +16,11 @@ jobs:
     - name: Build with Gradle
       run: chmod +x gradlew && ./gradlew build
     - name: Test with gradle
-      run: chmod +x gradlew && ./gradlew check
+      run: ./gradlew check
+    - name: Code Climate upload test coverage
+      uses: paambaati/codeclimate-action@v2.4.0
+      env:
+        CC_TEST_REPORTER_ID: 426a8cba7a9651be2761a6f78bd46e622c0c4e2dd7d611e21b57154ff97ba5cc
+      with:
+        # Coverage command to execute
+       coverageCommand: ./gradlew test jacocoTestReport
