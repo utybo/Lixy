@@ -23,5 +23,5 @@ jobs:
         CC_TEST_REPORTER_ID: 426a8cba7a9651be2761a6f78bd46e622c0c4e2dd7d611e21b57154ff97ba5cc
       with:
         # Coverage command to execute
-       coverageCommand: ./gradlew test jacocoTestReport
-       coverageLocations: ["./build/reports/jacoco/test/jacocoTestReport.xml:jacoco"]
+        coverageCommand: ./gradlew test jacocoTestReport
+        coverageLocations: ["./build/reports/jacoco/test/jacocoTestReport.xml:jacoco"]
