@@ -16,8 +16,12 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
     val defaultState: LixyState
         get() = states[null] ?: error("No default state in lexer")
 
+    /**
+     * The amount of states contained within this lexer
+     */
     val statesCount: Int
         get() = states.size
+
     /**
      * The tokenize method will turn a string into a list of tokens based on
      * the [LixyState]s contained in this [LixyLexer] ([states]) and the
@@ -25,7 +29,7 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
     fun tokenize(s: String): List<LixyToken> {
         var index = 0
         val tokens = mutableListOf<LixyToken>()
-        val state = defaultState
+        var state = defaultState
         // While we are in the string
         while (index < s.length) {
             // The first matcher to match will return true, and firstOrNull
@@ -44,6 +48,8 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
                         else -> {
                             tokens.add(match)
                             index = match.endsAt
+                            if (matcher.goesToState != NoState)
+                                state = getState(matcher.goesToState)
                             true
                         }
                     }
@@ -56,6 +62,11 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
         return tokens
     }
 
+    /**
+     * Get the state with the given label
+     *
+     * @throws LixyException if the state was not found
+     */
     fun getState(label: LixyStateLabel?): LixyState =
         states[label] ?: throw LixyException("State with given label not found")
 }
