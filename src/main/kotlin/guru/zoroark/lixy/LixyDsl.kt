@@ -1,6 +1,6 @@
 package guru.zoroark.lixy
 
-import guru.zoroark.lixy.matchers.LixyTokenMatcher
+import guru.zoroark.lixy.matchers.*
 
 /**
  * URL to the website of Lixy. Please change this if you fork this project!
@@ -28,8 +28,13 @@ fun lixy(body: LixyDslEnvironment.() -> Unit): LixyLexer {
  *
  * The behavior of a matcher is described in [LixyTokenMatcher]
  */
-fun matcher(matcherBody: (s: String, startAt: Int) -> LixyToken?): LixyTokenMatcher =
+fun matcher(
+    nextState: LixyNextStateBehavior = LixyNoStateChange,
+    matcherBody: (s: String, startAt: Int) -> LixyToken?
+): LixyTokenMatcher =
     object : LixyTokenMatcher() {
-        override fun match(s: String, startAt: Int): LixyToken? =
-            matcherBody(s, startAt)
+        override fun match(s: String, startAt: Int): LixyMatcherResult =
+            matcherBody(s, startAt)?.let {
+                LixyMatchedTokenResult(it, nextState)
+            } ?: LixyNoMatchResult
     }

@@ -1,9 +1,7 @@
 package guru.zoroark.lixy.matchers
 
-import guru.zoroark.lixy.LixyStateLabel
 import guru.zoroark.lixy.LixyToken
 import guru.zoroark.lixy.LixyTokenType
-import guru.zoroark.lixy.NoState
 
 /**
  * This class can be used to associate a [LixyTokenRecognizer] with a token type,
@@ -19,14 +17,16 @@ class LixyTokenRecognizerMatched(
      */
     val tokenType: LixyTokenType,
     /**
-     * The state that should be visited next, or [NoState] if no state should
-     * be visited. `null` for the default state.
+     * The behavior to follow for determining the next state
      */
-    goesToState: LixyStateLabel? = NoState
-) : LixyTokenMatcher(goesToState) {
-    override fun match(s: String, startAt: Int): LixyToken? =
+    nextStateBehavior: LixyNextStateBehavior = LixyNoStateChange
+) : LixyTokenMatcher(nextStateBehavior) {
+    override fun match(s: String, startAt: Int): LixyMatcherResult =
         recognizer.recognize(s, startAt)?.let { (recognizedSubstring, endsAt) ->
-            LixyToken(recognizedSubstring, startAt, endsAt, tokenType)
-        }
+            LixyMatchedTokenResult(
+                LixyToken(recognizedSubstring, startAt, endsAt, tokenType),
+                nextStateBehavior
+            )
+        } ?: LixyNoMatchResult
 
 }

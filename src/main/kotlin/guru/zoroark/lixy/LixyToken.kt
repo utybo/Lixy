@@ -3,8 +3,9 @@ package guru.zoroark.lixy
 /**
  * A [LixyToken] is a data class representing a token found through the
  * tokenization process of a [LixyLexer] and the matching process of a
- * [LixyTokenMatcher]. It has information on where the token begins, where it
- * ends, its type, and what it actually represents.
+ * [LixyTokenMatcher][guru.zoroark.lixy.matchers.LixyTokenMatcher]. It has
+ * information on where the token begins, where it ends, its type, and what it
+ * actually represents.
  */
 data class LixyToken(
     /**
@@ -25,8 +26,7 @@ data class LixyToken(
      */
     val endsAt: Int,
     /**
-     * The token type this token corresponds to, as defined by the
-     * [LixyTokenMatcher] that created this token
+     * The token type this token corresponds to
      */
     val tokenType: LixyTokenType
 )
