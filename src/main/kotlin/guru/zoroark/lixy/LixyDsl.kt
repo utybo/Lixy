@@ -1,5 +1,8 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.LixyMatchedTokenResult
+import guru.zoroark.lixy.matchers.LixyMatcherResult
+import guru.zoroark.lixy.matchers.LixyNoMatchResult
 import guru.zoroark.lixy.matchers.LixyTokenMatcher
 
 /**
@@ -30,6 +33,7 @@ fun lixy(body: LixyDslEnvironment.() -> Unit): LixyLexer {
  */
 fun matcher(matcherBody: (s: String, startAt: Int) -> LixyToken?): LixyTokenMatcher =
     object : LixyTokenMatcher() {
-        override fun match(s: String, startAt: Int): LixyToken? =
-            matcherBody(s, startAt)
+        override fun match(s: String, startAt: Int): LixyMatcherResult =
+            matcherBody(s, startAt)?.let { LixyMatchedTokenResult(it) }
+                ?: LixyNoMatchResult
     }

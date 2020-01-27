@@ -24,9 +24,11 @@ class LixyTokenRecognizerMatched(
      */
     goesToState: LixyStateLabel? = NoState
 ) : LixyTokenMatcher(goesToState) {
-    override fun match(s: String, startAt: Int): LixyToken? =
+    override fun match(s: String, startAt: Int): LixyMatcherResult =
         recognizer.recognize(s, startAt)?.let { (recognizedSubstring, endsAt) ->
-            LixyToken(recognizedSubstring, startAt, endsAt, tokenType)
-        }
+            LixyMatchedTokenResult(
+                LixyToken(recognizedSubstring, startAt, endsAt, tokenType)
+            )
+        } ?: LixyNoMatchResult
 
 }

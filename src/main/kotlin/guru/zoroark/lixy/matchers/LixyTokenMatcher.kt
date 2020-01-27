@@ -27,5 +27,5 @@ abstract class LixyTokenMatcher(
      * @return Null if no match is possible, or a [LixyToken] that corresponds
      * to the matched substring.
      */
-    abstract fun match(s: String, startAt: Int): LixyToken?
+    abstract fun match(s: String, startAt: Int): LixyMatcherResult
 }

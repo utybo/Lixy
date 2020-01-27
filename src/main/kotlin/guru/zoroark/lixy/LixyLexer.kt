@@ -1,5 +1,9 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.LixyIgnoreMatchResult
+import guru.zoroark.lixy.matchers.LixyMatchedTokenResult
+import guru.zoroark.lixy.matchers.LixyNoMatchResult
+
 /**
  * A LixyLexer is a data class that contains the states that will be used for
  * the lexing process. It is the main entry for using a constructed lexer.
@@ -37,29 +41,42 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
             // exception
             state.matchers.firstOrNull { matcher ->
                 // Attempt to match
-                matcher.match(s, index)?.let { match ->
-                    when {
-                        match.string.length > match.endsAt - match.startsAt ->
-                            throw LixyException("Returned token string (${match.string}) is too large for the given range (${match.startsAt}-${match.endsAt})")
-                        match.startsAt < index ->
-                            throw LixyException("Incoherent indices: matcher ${matcher.javaClass.simpleName} says the token starts at ${match.startsAt} when the current index is $index")
-                        match.endsAt > s.length ->
-                            throw LixyException("Incoherent indices: matcher ${matcher.javaClass.simpleName} says the token ends at ${match.endsAt}, which is out of bounds (total length is ${s.length})")
-                        else -> {
-                            tokens.add(match)
-                            index = match.endsAt
-                            if (matcher.goesToState != NoState)
-                                state = getState(matcher.goesToState)
-                            true
-                        }
+                when (val result = matcher.match(s, index)) {
+                    is LixyNoMatchResult -> false
+                    is LixyIgnoreMatchResult -> true
+                    is LixyMatchedTokenResult -> {
+                        val match = result.token
+                        checkTokenBounds(match, index, s.length, matcher.javaClass.simpleName)
+                        tokens.add(match)
+                        index = match.endsAt
+                        if (matcher.goesToState != NoState)
+                            state = getState(matcher.goesToState)
+                        true
                     }
-                } ?: false
+                }
             }
             // firstOrNull returned null: throw an exception, nothing
             // matched
                 ?: throw LixyNoMatchException("No match for string starting at index $index")
         }
         return tokens
+    }
+
+    private fun checkTokenBounds(
+        match: LixyToken,
+        index: Int,
+        totalLength: Int,
+        matcherName: String
+    ): Unit = with(match) {
+        when {
+            string.length > endsAt - startsAt ->
+                throw LixyException("Returned token string ($string) is too large for the given range ($startsAt-$endsAt)")
+            startsAt < index ->
+                throw LixyException("Incoherent indices: matcher $matcherName says the token starts at $startsAt when the current index is $index")
+            endsAt > totalLength ->
+                throw LixyException("Incoherent indices: matcher $matcherName says the token ends at $endsAt, which is out of bounds (total length is $totalLength)")
+
+        }
     }
 
     /**
