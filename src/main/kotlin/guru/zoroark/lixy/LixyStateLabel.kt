@@ -19,6 +19,9 @@ fun stateLabel(): LixyGenericStateLabel = LixyGenericStateLabel()
 
 /**
  * A special state label to be used in constructs like
- * [LixyTokenMatcher][guru.zoroark.lixy.matchers.LixyTokenMatcher]s
+ * [LixyTokenMatcher][guru.zoroark.lixy.matchers.LixyTokenMatcher]s.
+ *
+ * This denotes the fact that "no state" should be used. For example, that the
+ * current element should not "go" to any state after detection.
  */
 object NoState : LixyStateLabel
