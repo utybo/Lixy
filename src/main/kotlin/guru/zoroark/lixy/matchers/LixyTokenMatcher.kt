@@ -1,8 +1,6 @@
 package guru.zoroark.lixy.matchers
 
-import guru.zoroark.lixy.LixyStateLabel
 import guru.zoroark.lixy.LixyToken
-import guru.zoroark.lixy.NoState
 
 /**
  * A token matcher is an object that can determine whether a string at a given
@@ -11,11 +9,12 @@ import guru.zoroark.lixy.NoState
  */
 abstract class LixyTokenMatcher(
     /**
-     * The next state that the lexer should go to after a successful match.
-     * `null` for the default state, [NoState] if the state should not be
-     * changed.
+     * The behavior for choosing a next state that will be followed upon a
+     * successful match.
+     *
+     * @see LixyNextStateBehavior
      */
-    val goesToState: LixyStateLabel? = NoState
+    protected val nextStateBehavior: LixyNextStateBehavior = LixyNoStateChange
 ) {
     /**
      * This function determines whether the string [s], starting at the index

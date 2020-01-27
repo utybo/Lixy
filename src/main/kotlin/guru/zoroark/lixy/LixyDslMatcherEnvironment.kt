@@ -1,8 +1,6 @@
 package guru.zoroark.lixy
 
-import guru.zoroark.lixy.matchers.LixyTokenRecognizerMatched
-import guru.zoroark.lixy.matchers.LixyTokenMatcher
-import guru.zoroark.lixy.matchers.LixyTokenRecognizer
+import guru.zoroark.lixy.matchers.*
 
 /**
  * A simple builder for matchers, whose main purpose is to provide a way to
@@ -20,11 +18,13 @@ class LixyDslMatcherEnvironment(
     var matchesToTokenType: LixyTokenType
 ) : Buildable<LixyTokenMatcher> {
     /**
-     * Which state the built matcher will lead to.
+     * Which state the built matcher will lead to, in the form of a
+     * [LixyNextStateBehavior] object.
      *
      * @see thenState
+     * @see LixyNextStateBehavior
      */
-    private var goesToState: LixyStateLabel? = NoState
+    private var nextStateBehavior: LixyNextStateBehavior = LixyNoStateChange
 
     /**
      * Specifies that, once a match is found, the lexer should use the given
@@ -33,16 +33,22 @@ class LixyDslMatcherEnvironment(
      * * [default][LixyDslEnvironment.default] or `null` to go to the default
      *   state
      * * A [LixyStateLabel] to go to the state with the given label
-     * * [NoState] to remain on the same node. This is the default behavior.
      */
-    infix fun thenState(next: LixyStateLabel?) {
-        goesToState = next
+    infix fun thenState(next: LixyStateLabel) {
+        nextStateBehavior = LixyGoToLabeledState(next)
     }
 
-    infix fun thenState(next: LixyDslEnvironment.StateInfixCreator) {
-        goesToState = null
+    infix fun thenState(
+        @Suppress("UNUSED_PARAMETER")
+        defaultMarker: LixyDslEnvironment.StateInfixCreator
+    ) {
+        nextStateBehavior = LixyGoToDefaultState
     }
 
     override fun build(): LixyTokenMatcher =
-        LixyTokenRecognizerMatched(baseRecognizer, matchesToTokenType, goesToState)
+        LixyTokenRecognizerMatched(
+            baseRecognizer,
+            matchesToTokenType,
+            nextStateBehavior
+        )
 }

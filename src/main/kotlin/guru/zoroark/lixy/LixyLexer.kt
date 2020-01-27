@@ -1,8 +1,6 @@
 package guru.zoroark.lixy
 
-import guru.zoroark.lixy.matchers.LixyIgnoreMatchResult
-import guru.zoroark.lixy.matchers.LixyMatchedTokenResult
-import guru.zoroark.lixy.matchers.LixyNoMatchResult
+import guru.zoroark.lixy.matchers.*
 
 /**
  * A LixyLexer is a data class that contains the states that will be used for
@@ -46,11 +44,22 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
                     is LixyIgnoreMatchResult -> true
                     is LixyMatchedTokenResult -> {
                         val match = result.token
-                        checkTokenBounds(match, index, s.length, matcher.javaClass.simpleName)
+                        checkTokenBounds(
+                            match,
+                            index,
+                            s.length,
+                            matcher.javaClass.simpleName
+                        )
                         tokens.add(match)
                         index = match.endsAt
-                        if (matcher.goesToState != NoState)
-                            state = getState(matcher.goesToState)
+                        state = when (result.nextStateBehavior) {
+                            is LixyGoToDefaultState ->
+                                defaultState
+                            is LixyGoToLabeledState ->
+                                getState(result.nextStateBehavior.stateLabel)
+                            is LixyNoStateChange ->
+                                state
+                        }
                         true
                     }
                 }

@@ -1,6 +1,5 @@
 package guru.zoroark.lixy.matchers
 
-import guru.zoroark.lixy.offsetBy
 import java.util.regex.Pattern
 
 internal class RegexPatternRecognizer(val regexPattern: Pattern) :

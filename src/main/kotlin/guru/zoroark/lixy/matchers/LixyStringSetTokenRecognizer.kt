@@ -13,7 +13,9 @@ import guru.zoroark.lixy.LixyException
  * fairly efficient recognizer.
  *
  * These recognizers should be created using the
- * [anyOf][LixyDslStateEnvironment.anyOf] DSL function.
+ * [anyOf][guru.zoroark.lixy.LixyDslStateEnvironment.anyOf] DSL function.
+ *
+ * @see guru.zoroark.lixy.LixyDslStateEnvironment.anyOf
  */
 class LixyStringSetTokenRecognizer(stringsToRecognize: List<String>) :
     LixyTokenRecognizer {

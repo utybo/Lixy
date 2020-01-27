@@ -27,4 +27,4 @@ object LixyIgnoreMatchResult : LixyMatcherResult()
  *
  * @property token The token that is the result of the match.
  */
-class LixyMatchedTokenResult(val token: LixyToken) : LixyMatcherResult()
+class LixyMatchedTokenResult(val token: LixyToken, val nextStateBehavior: LixyNextStateBehavior) : LixyMatcherResult()
