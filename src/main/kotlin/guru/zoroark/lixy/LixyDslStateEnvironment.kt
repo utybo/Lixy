@@ -2,6 +2,7 @@ package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.*
 import guru.zoroark.lixy.matchers.RegexPatternRecognizer
+import org.intellij.lang.annotations.Language
 import java.util.regex.Pattern
 
 /**
@@ -47,7 +48,7 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
      * @param regex The regular expression to use in the recognizer
      * @see isToken
      */
-    fun matches(regex: String): LixyTokenRecognizer =
+    fun matches(@Language("RegExp") regex: String): LixyTokenRecognizer =
         RegexPatternRecognizer(
             Pattern.compile(regex)
         )
