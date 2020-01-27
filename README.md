@@ -6,6 +6,9 @@
 ![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blue?logo=Kotlin&style=for-the-badge)
 ![Experimental](https://img.shields.io/badge/Stage-Experimental-red?style=for-the-badge)
 
+
+[![Release](https://jitpack.io/v/guru.zoroark/lixy.svg?style=flat-square)](https://jitpack.io/#guru.zoroark/lixy) You can get the latest release/commit on JitPack.
+
 ## What is Lixy?
 
 Lixy is a ["lexer"](https://en.wikipedia.org/wiki/Lexical_analysis) framework. It is a library that allows you to turn a string into a sequence of tokens using rules that you define using a Kotlin DSL.
