@@ -32,6 +32,18 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
         var index = 0
         val tokens = mutableListOf<LixyToken>()
         var state = defaultState
+        /**
+         * A function for updating the lexer's index and state based on what
+         * is returned by a matcher
+         */
+        fun updateParams(newIndex: Int, behavior: LixyNextStateBehavior) {
+            index = newIndex
+            state = when (behavior) {
+                is LixyGoToDefaultState -> defaultState
+                is LixyGoToLabeledState -> getState(behavior.stateLabel)
+                is LixyNoStateChange -> state
+            }
+        }
         // While we are in the string
         while (index < s.length) {
             // The first matcher to match will return true, and firstOrNull
@@ -40,32 +52,24 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
             state.matchers.firstOrNull { matcher ->
                 // Attempt to match
                 when (val result = matcher.match(s, index)) {
+                    // Did not match
                     is LixyNoMatchResult -> false
-                    is LixyIgnoreMatchResult -> true
-                    is LixyMatchedTokenResult -> {
-                        val match = result.token
-                        checkTokenBounds(
-                            match,
-                            index,
-                            s.length,
-                            matcher.javaClass.simpleName
-                        )
-                        tokens.add(match)
-                        index = match.endsAt
-                        state = when (result.nextStateBehavior) {
-                            is LixyGoToDefaultState ->
-                                defaultState
-                            is LixyGoToLabeledState ->
-                                getState(result.nextStateBehavior.stateLabel)
-                            is LixyNoStateChange ->
-                                state
-                        }
+                    // Matched, but no token should be created (ignore the
+                    // match) in the final token sequence
+                    is LixyIgnoreMatchResult -> with(result) {
+                        updateParams(tokenEndsAt, nextStateBehavior)
+                        true
+                    }
+                    // Matched,
+                    is LixyMatchedTokenResult -> result.token.let {
+                        checkTokenBounds(it, index, s.length)
+                        tokens += it
+                        updateParams(it.endsAt, result.nextStateBehavior)
                         true
                     }
                 }
             }
-            // firstOrNull returned null: throw an exception, nothing
-            // matched
+            // firstOrNull returned null: throw an exception, nothing matched
                 ?: throw LixyNoMatchException("No match for string starting at index $index")
         }
         return tokens
@@ -74,17 +78,15 @@ data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
     private fun checkTokenBounds(
         match: LixyToken,
         index: Int,
-        totalLength: Int,
-        matcherName: String
+        totalLength: Int
     ): Unit = with(match) {
         when {
             string.length > endsAt - startsAt ->
                 throw LixyException("Returned token string ($string) is too large for the given range ($startsAt-$endsAt)")
             startsAt < index ->
-                throw LixyException("Incoherent indices: matcher $matcherName says the token starts at $startsAt when the current index is $index")
+                throw LixyException("Incoherent indices: matcher says the token starts at $startsAt when the current index is $index")
             endsAt > totalLength ->
-                throw LixyException("Incoherent indices: matcher $matcherName says the token ends at $endsAt, which is out of bounds (total length is $totalLength)")
-
+                throw LixyException("Incoherent indices: matcher says the token ends at $endsAt, which is out of bounds (total length is $totalLength)")
         }
     }
 

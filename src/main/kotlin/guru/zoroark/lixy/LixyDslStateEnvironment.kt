@@ -28,8 +28,11 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
      * Add a matcher that attempts to match against the given string exactly,
      * returning a token with the given token type in case of a match
      */
-    infix fun String.isToken(token: LixyTokenType): LixyDslMatcherEnvironment =
-        LixyDslMatcherEnvironment(LixyStringTokenRecognizer(this), token).also {
+    infix fun String.isToken(token: LixyTokenType): LixyDslMatchedMatcherEnvironment =
+        LixyDslMatchedMatcherEnvironment(
+            LixyStringTokenRecognizer(this),
+            token
+        ).also {
             tokenMatchers += it
         }
 
@@ -59,8 +62,8 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
      * recognized substring.. The exact pattern that is recognized is entirely
      * up to the recognizer.
      */
-    infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType): LixyDslMatcherEnvironment =
-        LixyDslMatcherEnvironment(
+    infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType): LixyDslMatchedMatcherEnvironment =
+        LixyDslMatchedMatcherEnvironment(
             this,
             tokenType
         ).also {
@@ -81,4 +84,16 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
             LixyStringSetTokenRecognizer(
                 s.asList()
             )
+
+    /**
+     * Anything that matches this string exactly will be ignored. This would be
+     * equivalent to a `isToken` that does not actually create any token.
+     *
+     * The matched sequence is skipped entirely by the lexer.
+     */
+    val String.ignore: LixyDslIgnoringMatcherEnvironment
+        get() =
+            LixyDslIgnoringMatcherEnvironment(LixyStringTokenRecognizer(this)).also {
+                tokenMatchers += it
+            }
 }

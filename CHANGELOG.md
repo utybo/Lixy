@@ -15,7 +15,8 @@ Breaking DSL changes are marked with **BRK DSL**. Breaking API changes that do n
 ### Added
 * Recognizer and Matcher system
 * RegExp, exact string, any-of-string-set matchers/recognizers added
-* Buildable interface for declaring things that can be built through the DSL
+* Matchers can skip sequences instead of emitting tokens
+* `Buildable` interface for declaring things that can be built through the DSL
 * DSL for the lexer, states and the individual matchers
 * Lexer system with single state or multiple states
 * Tests for the lexer DSL

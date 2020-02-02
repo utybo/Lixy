@@ -19,8 +19,13 @@ object LixyNoMatchResult : LixyMatcherResult()
 /**
  * Indicates that the match was successful, but no token should be created for
  * this match.
+ *
+ * @property tokenEndsAt Where the ignored token ends (exclusive, this is the
+ * index where the lexer will resume)
+ * @property nextStateBehavior The behavior to follow after processing this
+ * match regarding states
  */
-object LixyIgnoreMatchResult : LixyMatcherResult()
+class LixyIgnoreMatchResult(val tokenEndsAt: Int, val nextStateBehavior: LixyNextStateBehavior) : LixyMatcherResult()
 
 /**
  * Indicates that the match was successful and a token was created.

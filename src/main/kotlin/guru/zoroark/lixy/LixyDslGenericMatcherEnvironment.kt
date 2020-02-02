@@ -2,21 +2,13 @@ package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.*
 
-/**
- * A simple builder for matchers, whose main purpose is to provide a way to
- * select a "next state" for a matcher through the [thenState] function.
- */
-class LixyDslMatcherEnvironment(
+abstract class LixyDslGenericMatcherEnvironment(
     /**
      * The original recognizer that should be used by the matcher that will be
      * built
      */
-    var baseRecognizer: LixyTokenRecognizer,
-    /**
-     * The token type this matcher will be matched against.
-     */
-    var matchesToTokenType: LixyTokenType
-) : Buildable<LixyTokenMatcher> {
+    var baseRecognizer: LixyTokenRecognizer
+): Buildable<LixyTokenMatcher> {
     /**
      * Which state the built matcher will lead to, in the form of a
      * [LixyNextStateBehavior] object.
@@ -24,7 +16,7 @@ class LixyDslMatcherEnvironment(
      * @see thenState
      * @see LixyNextStateBehavior
      */
-    private var nextStateBehavior: LixyNextStateBehavior = LixyNoStateChange
+    protected var nextStateBehavior: LixyNextStateBehavior = LixyNoStateChange
 
     /**
      * Specifies that, once a match is found, the lexer should use the given
@@ -44,11 +36,4 @@ class LixyDslMatcherEnvironment(
     ) {
         nextStateBehavior = LixyGoToDefaultState
     }
-
-    override fun build(): LixyTokenMatcher =
-        LixyTokenRecognizerMatched(
-            baseRecognizer,
-            matchesToTokenType,
-            nextStateBehavior
-        )
 }
