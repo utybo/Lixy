@@ -36,13 +36,12 @@ tests (src/main/test/kotlin/guru/zoroark/lixy).
 This simple example shows you what can be done using a single state.
 
 ```kotlin
-// tokens.kt
+// We need this so we can use e.g. DOT instead of MyTokenTypes.DOT
+import MyTokenTypes.* 
+
 enum class MyTokenTypes : LixyTokenType {
     DOT, WORD, WHITESPACE
 }
-
-// lexer.kt
-import MyTokenTypes.*
 
 val lexer = lixy {
     state {
@@ -69,7 +68,9 @@ string detector that differentiates string content from content that is not from
 inside a string.
 
 ```kotlin
-// tokens.kt
+import TokenTypes.*
+import Labels.*
+
 enum class TokenTypes : LixyTokenType {
     WORD, STRING_CONTENT, QUOTES, WHITESPACE
 }
@@ -78,7 +79,6 @@ enum class Labels : LixyStateLabel {
     IN_STRING
 }
 
-// lexer.kt
 val lexer = lixy {
     default state {
         " " isToken WHITESPACE

@@ -1,9 +1,19 @@
 package guru.zoroark.lixy.samples
 
+import guru.zoroark.lixy.LixyStateLabel
+import guru.zoroark.lixy.LixyTokenType
 import guru.zoroark.lixy.lixy
 import guru.zoroark.lixy.samples.StringDetectorLabels.*
 import guru.zoroark.lixy.samples.StringDetectorTypes.*
 import kotlin.test.*
+
+enum class StringDetectorTypes: LixyTokenType {
+    word, whitespace, quotes, stringContent, punctuation
+}
+
+enum class StringDetectorLabels: LixyStateLabel {
+    inString
+}
 
 class StringDetector {
     @Test
