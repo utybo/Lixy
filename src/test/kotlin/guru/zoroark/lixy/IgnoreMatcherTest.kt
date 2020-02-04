@@ -60,5 +60,29 @@ class IgnoreMatcherTest {
         val result = lexer.tokenize(string)
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `Ignore matcher on any matcher in single state`() {
+        val tspace = tokenType()
+        val tword = tokenType()
+        val lexer = lixy {
+            default state {
+                anyOf("banana", "apple", "strawberry", "raspberry").ignore
+                " " isToken tspace
+                matches("[a-zA-Z_]+") isToken tword
+            }
+        }
+        val string = "banana test apple yes raspberry"
+        val expected = listOf(
+            LixyToken(" ", 6, 7, tspace),
+            LixyToken("test", 7, 11, tword),
+            LixyToken(" ", 11, 12, tspace),
+            LixyToken(" ", 17, 18, tspace),
+            LixyToken("yes", 18, 21, tword),
+            LixyToken(" ", 21, 22, tspace)
+        )
+        val result = lexer.tokenize(string)
+        assertEquals(expected, result)
+    }
 }
 

@@ -96,4 +96,10 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
             LixyDslIgnoringMatcherEnvironment(LixyStringTokenRecognizer(this)).also {
                 tokenMatchers += it
             }
+
+    val LixyTokenRecognizer.ignore: LixyDslIgnoringMatcherEnvironment
+        get() =
+            LixyDslIgnoringMatcherEnvironment(this).also {
+                tokenMatchers += it
+            }
 }
