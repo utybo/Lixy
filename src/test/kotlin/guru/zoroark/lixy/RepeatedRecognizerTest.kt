@@ -63,4 +63,59 @@ class RepeatedRecognizerTest {
         val result = lexer.tokenize(stringSuccess)
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `Any repeated recognizer test`() {
+        val tgreet = tokenType()
+        val ttest = tokenType()
+        val lexer = lixy {
+            state {
+                anyOf("hello", "hi", "hey").repeated isToken tgreet
+                "test" isToken ttest
+                " ".ignore
+            }
+        }
+        val string = "hellohello hihihi hey hihi test heyheyhey"
+        val expected = listOf(
+            LixyToken("hellohello", 0, 10, tgreet),
+            LixyToken("hihihi", 11, 17, tgreet),
+            LixyToken("hey", 18, 21, tgreet),
+            LixyToken("hihi", 22, 26, tgreet),
+            LixyToken("test", 27, 31, ttest),
+            LixyToken("heyheyhey", 32, 41, tgreet)
+        )
+        val result = lexer.tokenize(string)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `Any repeated recognizer with additional parameters test`() {
+        val tgreet = tokenType()
+        val ttest = tokenType()
+        val lexer = lixy {
+            state {
+                anyOf("hello", "hi", "hey").repeated(min = 2, max = 4) isToken tgreet
+                "test" isToken ttest
+                " ".ignore
+            }
+        }
+        val stringNotEnough = "hellohello hihihi hey hihihihi"
+        assertFailsWith<LixyNoMatchException> {
+            lexer.tokenize(stringNotEnough)
+        }
+        val stringTooMany = "hellohellohello heyhey hihihihihi hihihi"
+        assertFailsWith<LixyNoMatchException> {
+            lexer.tokenize(stringTooMany)
+        }
+        val stringSuccess = "hellohello hihihi hihi test heyheyheyhey"
+        val expected = listOf(
+            LixyToken("hellohello", 0, 10, tgreet),
+            LixyToken("hihihi", 11, 17, tgreet),
+            LixyToken("hihi", 18, 22, tgreet),
+            LixyToken("test", 23, 27, ttest),
+            LixyToken("heyheyheyhey", 28, 40, tgreet)
+        )
+        val result = lexer.tokenize(stringSuccess)
+        assertEquals(expected, result)
+    }
 }
