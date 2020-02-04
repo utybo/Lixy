@@ -1,6 +1,6 @@
 # [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy Changelog
 
-[README](README.md) | CHANGELOG
+[README](README.md) | CHANGELOG | [DOCUMENTATION](DOCUMENTATION.md)
 
 All notable changes to this project will be documented in this file.
 

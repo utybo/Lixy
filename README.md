@@ -1,6 +1,6 @@
 # [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy, the lexer with a beautiful Kotlin DSL
 
-README | [CHANGELOG](CHANGELOG.md)
+README | [CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](DOCUMENTATION.md)
 
 [![Actions Status](https://img.shields.io/github/workflow/status/utybo/Lixy/Tests?style=for-the-badge&logo=github&label=tests)](https://github.com/utybo/Lixy/actions)
 [![Code Climate coverage](https://img.shields.io/codeclimate/coverage/utybo/Lixy?style=for-the-badge&logo=Code-Climate)](https://codeclimate.com/github/utybo/Lixy/test_coverage)
