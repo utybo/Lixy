@@ -37,6 +37,19 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
         }
 
     /**
+     * Add a matcher that attempts to match against any one character in the
+     * given range, returning a token with the given token type in case of a
+     * match.
+     */
+    infix fun CharRange.isToken(token: LixyTokenType): LixyDslMatchedMatcherEnvironment =
+        LixyDslMatchedMatcherEnvironment(
+            LixyCharRangeTokenRecognizer(this),
+            token
+        ).also {
+            tokenMatchers += it
+        }
+
+    /**
      * Add an already defined matcher to this state
      */
     operator fun LixyTokenMatcher.unaryPlus() {
