@@ -98,7 +98,6 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         }
     }
 
-
     override fun build(): LixyLexer {
         return LixyLexer(
             states = constructedStates.mapValues { (_, v) -> v.build() }

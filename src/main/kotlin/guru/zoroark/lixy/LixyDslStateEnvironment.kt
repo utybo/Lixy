@@ -25,29 +25,23 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
     }
 
     /**
-     * Add a matcher that attempts to match against the given string exactly,
-     * returning a token with the given token type in case of a match
+     * Add a matcher to this state that matches the recognizer (or
+     * pseudo-recognizer) on the left to the token type on the right.
+     *
+     * The recognizer (the object on the left on which you are calling
+     * `isToken`) may be any of the types supported by [toRecognizer].
+     *
+     * @param token The token to associate `this` to
+     * @return A [matcher environment][LixyDslMatchedMatcherEnvironment]
+     * that uses the given (pseudo-)recognizers as its recognition technique.
+     * @see toRecognizer
      */
-    infix fun String.isToken(token: LixyTokenType): LixyDslMatchedMatcherEnvironment =
-        LixyDslMatchedMatcherEnvironment(
-            LixyStringTokenRecognizer(this),
-            token
-        ).also {
-            tokenMatchers += it
-        }
-
-    /**
-     * Add a matcher that attempts to match against any one character in the
-     * given range, returning a token with the given token type in case of a
-     * match.
-     */
-    infix fun CharRange.isToken(token: LixyTokenType): LixyDslMatchedMatcherEnvironment =
-        LixyDslMatchedMatcherEnvironment(
-            LixyCharRangeTokenRecognizer(this),
-            token
-        ).also {
-            tokenMatchers += it
-        }
+    infix fun Any.isToken(token: LixyTokenType): LixyDslMatchedMatcherEnvironment {
+        val recognizer = toRecognizer(this)
+        val env = LixyDslMatchedMatcherEnvironment(recognizer, token)
+        tokenMatchers += env
+        return env
+    }
 
     /**
      * Add an already defined matcher to this state
@@ -69,19 +63,6 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
             Pattern.compile(regex)
         )
 
-    /**
-     * Add a matcher that attempts to match against the given recognizer,
-     * returning a token with the given token type in case of a successfully
-     * recognized substring.. The exact pattern that is recognized is entirely
-     * up to the recognizer.
-     */
-    infix fun LixyTokenRecognizer.isToken(tokenType: LixyTokenType): LixyDslMatchedMatcherEnvironment =
-        LixyDslMatchedMatcherEnvironment(
-            this,
-            tokenType
-        ).also {
-            tokenMatchers += it
-        }
 
     /**
      * Crate a recognizer that recognizes any of the strings provided as
@@ -99,20 +80,23 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
             )
 
     /**
-     * Anything that matches this string exactly will be ignored. This would be
-     * equivalent to a `isToken` that does not actually create any token.
+     * Anything that matches the given recognizer (or pseudo-recognizer) exactly
+     * will be ignored when encountered. This would be equivalent to a `isToken`
+     * that does not actually create any token.
      *
-     * The matched sequence is skipped entirely by the lexer.
+     * The matched sequence is skipped entirely by the lexer. No output is
+     * emitted whatsoever.
+     *
+     * The given recognizer or pseudo-recognizer can be anything that
+     * [toRecognizer] supports.
+     *
+     * @return A matcher environment that will produce a matcher that will make
+     * the lexer ignore anything that it matches.
      */
-    val String.ignore: LixyDslIgnoringMatcherEnvironment
-        get() =
-            LixyDslIgnoringMatcherEnvironment(LixyStringTokenRecognizer(this)).also {
-                tokenMatchers += it
-            }
-
-    val LixyTokenRecognizer.ignore: LixyDslIgnoringMatcherEnvironment
-        get() =
-            LixyDslIgnoringMatcherEnvironment(this).also {
-                tokenMatchers += it
-            }
+    val Any.ignore: LixyDslIgnoringMatcherEnvironment
+        get() {
+            val env = LixyDslIgnoringMatcherEnvironment(toRecognizer(this))
+            tokenMatchers += env
+            return env
+        }
 }
