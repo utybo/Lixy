@@ -1,5 +1,6 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.anyOf
 import kotlin.test.*
 
 class LixyTest {

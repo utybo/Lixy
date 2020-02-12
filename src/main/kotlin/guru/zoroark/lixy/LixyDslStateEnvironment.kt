@@ -63,22 +63,6 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
             Pattern.compile(regex)
         )
 
-
-    /**
-     * Crate a recognizer that recognizes any of the strings provided as
-     * parameters.
-     *
-     * @param s Strings that should be recognized
-     * @return A string recognizer. Use [isToken] to make it a usable matcher.
-     */
-    fun anyOf(vararg s: String): LixyTokenRecognizer =
-        if (s.isEmpty())
-            throw LixyException("anyOf() must have at least one string argument")
-        else
-            LixyStringSetTokenRecognizer(
-                s.asList()
-            )
-
     /**
      * Anything that matches the given recognizer (or pseudo-recognizer) exactly
      * will be ignored when encountered. This would be equivalent to a `isToken`

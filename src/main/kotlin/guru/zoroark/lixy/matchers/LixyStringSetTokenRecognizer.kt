@@ -44,3 +44,19 @@ class LixyStringSetTokenRecognizer(stringsToRecognize: List<String>) :
     }
 
 }
+
+
+/**
+ * Create a recognizer that recognizes any of the strings provided as
+ * parameters.
+ *
+ * @param s Strings that should be recognized
+ * @return A string recognizer. Use [isToken] to make it a usable matcher.
+ */
+fun anyOf(vararg s: String): LixyTokenRecognizer =
+    if (s.isEmpty())
+        throw LixyException("anyOf() must have at least one string argument")
+    else
+        LixyStringSetTokenRecognizer(
+            s.asList()
+        )

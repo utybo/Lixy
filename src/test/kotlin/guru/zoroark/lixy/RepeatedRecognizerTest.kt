@@ -1,5 +1,6 @@
 package guru.zoroark.lixy
 
+import guru.zoroark.lixy.matchers.anyOf
 import guru.zoroark.lixy.matchers.repeated
 import kotlin.test.*
 
