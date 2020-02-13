@@ -20,9 +20,7 @@ class LixyRepeatedRecognizer(
         var repetitions = 0
         var index = startAt
         var totalString = ""
-        // Not a huge fan of the while true there, but idk how to make it less
-        // trash-tier
-        while (true) {
+        while (index < s.length) {
             val (ts, end) = baseRecognizer.recognize(s, index) ?: break
             repetitions += 1
             if (max != null && repetitions > max) {
@@ -36,16 +34,25 @@ class LixyRepeatedRecognizer(
 }
 
 /**
- * Create a recognizer that recognizes the given string 1 or more times in a
- * row.
+ * Create a recognizer that recognizes the given recognizer or pseudo-recognizer
+ * 1 or more times in a row.
+ *
+ * This construct supports any (pseudo-)recognizer that is supported by
+ * [toRecognizer].
+ *
+ * @return A [LixyRepeatedRecognizer] using the given
+ * recognizer/pseudo-recognizer.
  */
-val String.repeated: LixyRepeatedRecognizer
-    get() =
-        LixyRepeatedRecognizer(LixyStringTokenRecognizer(this))
+val Any.repeated: LixyRepeatedRecognizer
+    get() = LixyRepeatedRecognizer(toRecognizer(this))
 
 /**
- * Create a recognizer that recognizes the given string [min] to [max]
- * (inclusive) times in a row, by default from 1 and no maximum.
+ * Create a recognizer that recognizes the given recognizer or pseudo-recognizer
+ * [min] to [max] (inclusive) times in a row. By default, the
+ * (pseudo)-recognizer is recognized from 1 to an infinite amount of times.
+ *
+ * Any recognizer or pseudo-recognizer that is supported by [toRecognizer] can
+ * be used here.
  *
  * @param min The minimum amount of repetitions required to get a successful
  * match. If the number of repetitions is below the minimum, the recognition
@@ -54,28 +61,9 @@ val String.repeated: LixyRepeatedRecognizer
  * @param max The maximum amount of repetitions required to get a successful
  * match, or null if no such limit should exist. If the number of repetitions
  * exceeds the maximum, the recognition fails.
- */
-fun String.repeated(min: Int = 1, max: Int? = null): LixyRepeatedRecognizer =
-    LixyRepeatedRecognizer(LixyStringTokenRecognizer(this), min, max)
-
-/**
- * Create a recognizer that recognizes the given recognizer 1 or more times in a
- * row.
- */
-val LixyTokenRecognizer.repeated: LixyRepeatedRecognizer
-    get() = LixyRepeatedRecognizer(this)
-
-/**
- * Create a recognizer that recognizes the given string [min] to [max]
- * (inclusive) times in a row, by default from 1 and no maximum.
  *
- * @param min The minimum amount of repetitions required to get a successful
- * match. If the number of repetitions is below the minimum, the recognition
- * fails.
- *
- * @param max The maximum amount of repetitions required to get a successful
- * match, or null if no such limit should exist. If the number of repetitions
- * exceeds the maximum, the recognition fails.
+ * @return A [LixyRepeatedRecognizer] that uses the constraints provided in
+ * the parameters.
  */
-fun LixyTokenRecognizer.repeated(min: Int = 1, max: Int? = null): LixyRepeatedRecognizer =
-    LixyRepeatedRecognizer(this, min, max)
+fun Any.repeated(min: Int = 1, max: Int? = null): LixyRepeatedRecognizer =
+    LixyRepeatedRecognizer(toRecognizer(this), min, max)
