@@ -10,13 +10,17 @@ import guru.zoroark.lixy.matchers.*
  *
  * The function [tokenize] can be used to use the lexer on a string
  */
-data class LixyLexer(private val states: Map<LixyStateLabel?, LixyState>) {
+data class LixyLexer(
+    private val states: Map<LixyStateLabel?, LixyState>,
+    private val defaultStateLabel: LixyStateLabel? = null
+) {
     /**
      * The default state in the case of a multi labeled state lexer, or the
      * only state of the lexer in the case of a single unlabeled state lexer
      */
     val defaultState: LixyState
-        get() = states[null] ?: error("No default state in lexer")
+        get() = states[defaultStateLabel]
+            ?: error("No default state in lexer, or the default state label was set to an invalid value")
 
     /**
      * The amount of states contained within this lexer

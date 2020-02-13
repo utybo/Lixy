@@ -86,6 +86,27 @@ class LixyStateTest {
     }
 
     @Test
+    fun `Lixy cannot create two states with the same label`() {
+        val a = stateLabel()
+        val ta = tokenType()
+        val tb = tokenType()
+        val exc = assertFailsWith<LixyException> {
+            lixy {
+                default state {
+                    "ab" isToken tb
+                }
+                a state {
+                    "b" isToken tb
+                }
+                a state {
+                    "a" isToken ta
+                }
+            }
+        }
+        assert(exc.message!!.contains("two states with the same label"))
+    }
+
+    @Test
     fun `Lixy successfully constructs multiple states and starts on default`() {
         val one = tokenType()
         val two = tokenType()
@@ -112,8 +133,9 @@ class LixyStateTest {
         // Check contents of other state
         val oState = lexer.getState(other)
         assertEquals(1, oState.matchers.size)
-        val twoMatcher = (oState.matchers[0] as? LixyTokenRecognizerMatched)?.recognizer as? LixyStringTokenRecognizer
-            ?: error("Incorrect matcher type")
+        val twoMatcher =
+            (oState.matchers[0] as? LixyTokenRecognizerMatched)?.recognizer as? LixyStringTokenRecognizer
+                ?: error("Incorrect matcher type")
         assertEquals("2", twoMatcher.toRecognize)
 
         // Check that first state is used
@@ -150,5 +172,71 @@ class LixyStateTest {
             ),
             result
         )
+    }
+
+    @Test
+    fun `Lixy supports redirecting the default state`() {
+        val a = stateLabel()
+        val b = stateLabel()
+        val ta = tokenType()
+        val tb = tokenType()
+        val lexer = lixy {
+            default state a
+            a state {
+                "a" isToken ta thenState b
+            }
+            b state {
+                "b" isToken tb thenState a
+                "c" isToken tb thenState default // should also work
+            }
+        }
+        val string = "abacaba"
+        val expected = listOf(
+            LixyToken("a", 0, 1, ta),
+            LixyToken("b", 1, 2, tb),
+            LixyToken("a", 2, 3, ta),
+            LixyToken("c", 3, 4, tb),
+            LixyToken("a", 4, 5, ta),
+            LixyToken("b", 5, 6, tb),
+            LixyToken("a", 6, 7, ta)
+        )
+        val actual = lexer.tokenize(string)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `Lixy cannot redefine default after redirecting default`() {
+        val a = stateLabel()
+        val ta = tokenType()
+        val b = stateLabel()
+        val tb = tokenType()
+        val exc = assertFailsWith<LixyException> {
+            lixy {
+                default state a
+                default state {
+                    "a" isToken ta
+                }
+                b state {
+                    "b" isToken tb
+                }
+            }
+        }
+        assert(exc.message!!.contains("already defined"))
+    }
+
+    @Test
+    fun `Lixy cannot redefine default state in single state lexer kind`() {
+        val a = stateLabel()
+        val ta = tokenType()
+        val exc = assertFailsWith<LixyException> {
+            lixy {
+                state {
+                    "a" isToken ta
+                }
+                default state a
+            }
+        }
+        assert(exc.message!!.contains("Cannot redefine"))
+        assert(exc.message!!.contains("single-state"))
     }
 }

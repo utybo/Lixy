@@ -39,6 +39,12 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
         mutableMapOf()
 
     /**
+     * The state label of the default state. Null by default, can be redefined
+     * through the `default state stateLabel` construct.
+     */
+    private var defaultStateLabel: LixyStateLabel? = null
+
+    /**
      * Create a state using a high-level DSL and add it to this object.
      * The state is not constructed immediately and is only constructed when
      * [build] is called.
@@ -60,14 +66,30 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
 
     /**
      * Utility class whose only role is to allow the default state construct.
-     * (`default state { ... }`).
+     * (`default state { ... }` and `default state label`).
      */
     inner class StateInfixCreator internal constructor() {
         /**
          * Create a state.
          */
-        infix fun state(body: LixyDslStateEnvironment.() -> Unit) =
-            this@LixyDslEnvironment.createLabeledState(null, body)
+        infix fun state(body: LixyDslStateEnvironment.() -> Unit) {
+            if (defaultStateLabel == null)
+                this@LixyDslEnvironment.createLabeledState(null, body)
+            else
+                throw LixyException("Default state was already defined as being another state")
+        }
+
+        /**
+         * Declare that the default state is another labeled state, whose label
+         * is provided afterwards.
+         */
+        infix fun state(labelOfDefaultState: LixyStateLabel) {
+            if (lexerKind == Kind.SINGLE_STATE)
+                throw LixyException("Cannot redefine a default state in a single-state lexer.")
+            if (lexerKind == Kind.UNDETERMINED)
+                lexerKind = Kind.LABELED_STATES
+            this@LixyDslEnvironment.defaultStateLabel = labelOfDefaultState
+        }
     }
 
     /**
@@ -100,7 +122,8 @@ class LixyDslEnvironment : Buildable<LixyLexer> {
 
     override fun build(): LixyLexer {
         return LixyLexer(
-            states = constructedStates.mapValues { (_, v) -> v.build() }
+            states = constructedStates.mapValues { (_, v) -> v.build() },
+            defaultStateLabel = defaultStateLabel
         )
     }
 }
