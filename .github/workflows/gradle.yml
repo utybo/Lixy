@@ -14,7 +14,7 @@ jobs:
       with:
         java-version: 14
     - name: Build
-      run: chmod +x gradlew && ./gradlew build
+      run: chmod +x gradlew && ./gradlew assemble
     - name: Set up Code Climate test reporter
       run: |
         export GIT_COMMIT_SHA=${GITHUB_SHA}
