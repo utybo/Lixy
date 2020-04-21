@@ -4,13 +4,5 @@
 # Ignore Gradle build output directory
 build
 
-# Ignore irrelevant .idea files
-.idea/workspace.xml
-.idea/usage.statistics.xml
-.idea/tasks.xml
-.idea/shelf
-.idea/modules.xml
-.idea/gradle.xml
-.idea/libraries
-.idea/discord.xml
-*.iml
+# Ignore .idea files
+.idea
