@@ -29,6 +29,8 @@ jobs:
     - name: Generate test coverage report
       run: ./gradlew jacocoTestReport
     - name: Upload test coverage to Code Climate
+      env:
+        JACOCO_SOURCE_PATH: src/commonMain/kotlin src/jvmMain/kotlin
       run: |
         ./cc-test-reporter format-coverage build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
         ./cc-test-reporter upload-coverage
