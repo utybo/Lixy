@@ -4,6 +4,7 @@ import guru.zoroark.lixy.LixyStateLabel
 import guru.zoroark.lixy.LixyTokenType
 import guru.zoroark.lixy.lixy
 import guru.zoroark.lixy.matchers.anyOf
+import guru.zoroark.lixy.matchers.matches
 import guru.zoroark.lixy.samples.StringDetectorLabels.*
 import guru.zoroark.lixy.samples.StringDetectorTypes.*
 import kotlin.test.*
@@ -18,7 +19,7 @@ enum class StringDetectorLabels: LixyStateLabel {
 
 class StringDetector {
     @Test
-    fun `String detector`() {
+    fun string_detector() {
         val lexer = lixy {
             default state {
                 anyOf(" ", "\t", "\n") isToken whitespace

@@ -1,0 +1,63 @@
+plugins {
+    id "org.jetbrains.kotlin.multiplatform" version "1.3.72"
+    //id "org.jetbrains.dokka" version "0.10.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    jvm()
+    js {
+        browser {
+        }
+        nodejs {
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+            }
+        }
+
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+                implementation "org.jetbrains:annotations:18.0.0"
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+
+        nonJvmMain {
+            dependsOn commonMain
+        }
+
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+            }
+            dependsOn nonJvmMain
+        }
+
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+    }
+}

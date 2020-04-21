@@ -56,6 +56,6 @@ fun toRecognizer(x: Any): LixyTokenRecognizer =
         is String -> LixyStringTokenRecognizer(x)
         is CharRange -> LixyCharRangeTokenRecognizer(x)
         else -> throw LixyException(
-            "Unable to convert ${x::class.java.simpleName} to a recognizer."
+            "Unable to convert ${x::class.simpleName} to a recognizer."
         )
     }

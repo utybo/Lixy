@@ -6,7 +6,7 @@ import kotlin.test.*
 
 class LixyStateTest {
     @Test
-    fun `Lixy supports constructing one default state`() {
+    fun lixy_supports_constructing_one_default_state() {
         val dottoken = tokenType()
         val lixy = lixy {
             default state {
@@ -26,7 +26,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy fails to construct unlabeled then labeled default`() {
+    fun lixy_fails_to_construct_unlabeled_then_labeled_default() {
         val ttype = tokenType()
         assertFailsWith<LixyException> {
             lixy {
@@ -41,7 +41,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy fails to construct labeled default then unlabeled`() {
+    fun lixy_fails_to_construct_labeled_default_then_unlabeled() {
         val ttype = tokenType()
         assertFailsWith<LixyException> {
             lixy {
@@ -56,7 +56,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy fails to construct multiple unlabeled states`() {
+    fun lixy_fails_to_construct_multiple_unlabeled_states() {
         val ttype = tokenType()
         assertFailsWith<LixyException> {
             lixy {
@@ -71,7 +71,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy fails to construct multiple default states`() {
+    fun lixy_fails_to_construct_multiple_default_states() {
         val ttype = tokenType()
         assertFailsWith<LixyException> {
             lixy {
@@ -86,7 +86,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy cannot create two states with the same label`() {
+    fun lixy_cannot_create_two_states_with_the_same_label() {
         val a = stateLabel()
         val ta = tokenType()
         val tb = tokenType()
@@ -103,11 +103,11 @@ class LixyStateTest {
                 }
             }
         }
-        assert(exc.message!!.contains("two states with the same label"))
+        assertTrue(exc.message!!.contains("two states with the same label"))
     }
 
     @Test
-    fun `Lixy successfully constructs multiple states and starts on default`() {
+    fun lixy_successfully_constructs_multiple_states_and_starts_on_default() {
         val one = tokenType()
         val two = tokenType()
         val other = stateLabel()
@@ -149,7 +149,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy supports switching from state to state`() {
+    fun lixy_supports_switching_from_state_to_state() {
         val one = tokenType()
         val two = tokenType()
         val other = stateLabel()
@@ -175,7 +175,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy supports redirecting the default state`() {
+    fun lixy_supports_redirecting_the_default_state() {
         val a = stateLabel()
         val b = stateLabel()
         val ta = tokenType()
@@ -205,7 +205,7 @@ class LixyStateTest {
     }
 
     @Test
-    fun `Lixy cannot redefine default after redirecting default`() {
+    fun lixy_cannot_redefine_default_after_redirecting_default() {
         val a = stateLabel()
         val ta = tokenType()
         val b = stateLabel()
@@ -221,11 +221,11 @@ class LixyStateTest {
                 }
             }
         }
-        assert(exc.message!!.contains("already defined"))
+        assertTrue(exc.message!!.contains("already defined"))
     }
 
     @Test
-    fun `Lixy cannot redefine default state in single state lexer kind`() {
+    fun lixy_cannot_redefine_default_state_in_single_state_lexer_kind() {
         val a = stateLabel()
         val ta = tokenType()
         val exc = assertFailsWith<LixyException> {
@@ -236,7 +236,7 @@ class LixyStateTest {
                 default state a
             }
         }
-        assert(exc.message!!.contains("Cannot redefine"))
-        assert(exc.message!!.contains("single-state"))
+        assertTrue(exc.message!!.contains("Cannot redefine"))
+        assertTrue(exc.message!!.contains("single-state"))
     }
 }
