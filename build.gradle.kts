@@ -8,7 +8,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.3.60"
+    id("org.jetbrains.kotlin.jvm") version "1.3.71"
     id("org.jetbrains.dokka") version "0.10.0"
 
     // Apply the java-library plugin for API and implementation separation.
