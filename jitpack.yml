@@ -1,2 +1,6 @@
 jdk:
   - openjdk11
+install:
+  # Exact same command but excluding tests, because this launches JS tests which require having a browser
+  # on the machine
+  - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION build publishToMavenLocal -x allTests
