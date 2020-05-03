@@ -42,6 +42,8 @@ Usually, the matching process is separated in two steps:
   information on what its associated token type is
 * Match the result of the recognizer with something, usually with a token type.
 
+That is a fairly oversimplified view of the process of making a lexer in Lixy however.
+
 ### My first lexer
 
 ```kotlin

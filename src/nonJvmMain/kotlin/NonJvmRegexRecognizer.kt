@@ -6,6 +6,8 @@ import guru.zoroark.lixy.LixyDslStateEnvironment
  * This version is less optimized than the JVM version due to limitations on the
  * Regex object, which does not have all of the features of the JVM's Matcher and
  * Pattern objects.
+ *
+ * Thanks to @Him188!
  */
 internal class NonJvmRegexPatternRecognizer(private val regex: Regex) :
     LixyTokenRecognizer {

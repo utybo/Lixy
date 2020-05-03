@@ -1,6 +1,7 @@
 package guru.zoroark.lixy.matchers
 
 import guru.zoroark.lixy.LixyDslStateEnvironment
+import guru.zoroark.lixy.utils.Language
 
 /**
  * Create a recognizer that recognizes the given regular expression. Use
@@ -9,4 +10,4 @@ import guru.zoroark.lixy.LixyDslStateEnvironment
  *
  * @param pattern The regular expression to use in the recognizer
  */
-expect fun LixyDslStateEnvironment.matches(pattern: String): LixyTokenRecognizer
+expect fun LixyDslStateEnvironment.matches(@Language("RegExp", "", "") pattern: String): LixyTokenRecognizer
