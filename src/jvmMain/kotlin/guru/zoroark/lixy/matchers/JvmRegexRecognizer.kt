@@ -20,5 +20,5 @@ internal class RegexPatternRecognizer(private val pattern: Pattern) :
     }
 }
 
-actual fun LixyDslStateEnvironment.matches(pattern: String): LixyTokenRecognizer =
+actual fun LixyDslStateEnvironment.matches(@Language("RegExp") pattern: String): LixyTokenRecognizer =
     RegexPatternRecognizer(Pattern.compile(pattern))
