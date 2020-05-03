@@ -4,4 +4,4 @@ install:
   # Exact same command but excluding tests, because this launches JS tests which require having a browser
   # on the machine
   - chmod +x gradlew
-  - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION build publishToMavenLocal -x allTests
+  - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION build publishToMavenLocal -x allTests -x jvmTest -x jsBrowserTest -x jsNodeTest
