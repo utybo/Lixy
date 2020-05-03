@@ -1,9 +1,6 @@
 package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.*
-import guru.zoroark.lixy.matchers.RegexPatternRecognizer
-import org.intellij.lang.annotations.Language
-import java.util.regex.Pattern
 
 /**
  * This classed is used to build a lexer state ([LixyState]) using a DSL, and is
@@ -49,19 +46,6 @@ class LixyDslStateEnvironment : Buildable<LixyState> {
     operator fun LixyTokenMatcher.unaryPlus() {
         tokenMatchers += this.selfBuildable()
     }
-
-    /**
-     * Create a recognizer that recognizes the given regular expression. Use
-     * this before [isToken] to create a matcher that matches against a regular
-     * expression.
-     *
-     * @param regex The regular expression to use in the recognizer
-     * @see isToken
-     */
-    fun matches(@Language("RegExp") regex: String): LixyTokenRecognizer =
-        RegexPatternRecognizer(
-            Pattern.compile(regex)
-        )
 
     /**
      * Anything that matches the given recognizer (or pseudo-recognizer) exactly

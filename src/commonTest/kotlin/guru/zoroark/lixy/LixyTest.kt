@@ -1,12 +1,13 @@
 package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.anyOf
+import guru.zoroark.lixy.matchers.matches
 import kotlin.test.*
 
 class LixyTest {
 
     @Test
-    fun `Empty Lixy should crash`() {
+    fun empty_lixy_should_crash() {
         // I mean, yeah, that lexer is not going to do anything
         assertFailsWith<LixyException> {
             lixy {}
@@ -14,18 +15,18 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy constructs single unlabeled state`() {
+    fun lixy_constructs_single_unlabeled_state() {
         // Should construct a single empty state
         val ret = lixy {
             state {}
         }
 
         assertEquals(ret.statesCount, 1)
-        assert(ret.defaultState.matchers.isEmpty())
+        assertTrue(ret.defaultState.matchers.isEmpty())
     }
 
     @Test
-    fun `Lixy is able to lex simple unlabeled state`() {
+    fun lixy_is_able_to_lex_simple_unlabeled_state() {
         // Should construct a single state with a single matcher
         val simpleStateDot =
             tokenType()
@@ -49,7 +50,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy is able to lex multiple token types unlabeled state`() {
+    fun lixy_is_able_to_lex_multiple_token_types_unlabeled_state() {
         // Should successfully lex with a single more complex state
         val ttdot = tokenType()
         val ttspace = tokenType()
@@ -80,7 +81,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy is able to parse some funny string patterns, v2`() {
+    fun lixy_is_able_to_parse_some_funny_string_patterns_v2() {
         // Additional testing, specifically because lexing tests are supposed
         // to be done sequentially (i.e. check for the first pattern, then the
         // second, etc.)
@@ -115,7 +116,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy supports custom matchers`() {
+    fun lixy_supports_custom_matchers() {
         // ttype will be the type returned by our custom matcher
         val ttype = tokenType()
         val ttdot = tokenType()
@@ -148,7 +149,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy incoherent matcher results cause exception (start before index)`() {
+    fun lixy_incoherent_matcher_results_cause_exception_start_before_index() {
         // Our token types
         val ttype = tokenType()
         val ttdot = tokenType()
@@ -171,11 +172,11 @@ class LixyTest {
             lexer.tokenize("...")
         }
         assertNotNull(exc.message)
-        assert(exc.message!!.contains("token starts"))
+        assertTrue(exc.message!!.contains("token starts"))
     }
 
     @Test
-    fun `Lixy incoherent matcher results cause exception (end is too far)`() {
+    fun lixy_incoherent_matcher_results_cause_exception_end_is_too_far() {
         val ttype = tokenType()
         val ttdot = tokenType()
         val lexer = lixy {
@@ -199,11 +200,11 @@ class LixyTest {
             lexer.tokenize("....")
         }
         assertNotNull(exc.message)
-        assert(exc.message!!.contains("token ends"))
+        assertTrue(exc.message!!.contains("token ends"))
     }
 
     @Test
-    fun `Lixy no match fails`() {
+    fun lixy_no_match_fails() {
         val ttdot = tokenType()
         val lexer = lixy {
             state {
@@ -216,7 +217,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy supports regex`() {
+    fun lixy_supports_regex() {
         val ttregex = tokenType()
         val lexer = lixy {
             state {
@@ -234,7 +235,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy supports transparent look-behind in regex`() {
+    fun lixy_supports_transparent_lookbehind_in_regex() {
         val ttregex = tokenType()
         val ttype = tokenType()
         val lexer = lixy {
@@ -256,7 +257,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy regex matches start and end of string as real start and end`() {
+    fun lixy_regex_matches_start_and_end_of_string_as_real_start_and_end() {
         val ttregex = tokenType()
         val ttype = tokenType()
         val lexer = lixy {
@@ -280,7 +281,7 @@ class LixyTest {
     }
 
     @Test
-    fun `Lixy anyOf crashes if no provided arguments`() {
+    fun lixy_anyOf_crashes_if_no_provided_arguments() {
         val tokenType =
             tokenType()
         val exc = assertFailsWith<LixyException> {
@@ -291,11 +292,11 @@ class LixyTest {
             }
         }
         assertNotNull(exc.message)
-        assert(exc.message!!.contains("anyOf") && exc.message!!.contains("at least one"))
+        assertTrue(exc.message!!.contains("anyOf") && exc.message!!.contains("at least one"))
     }
 
     @Test
-    fun `Lixy supports anyOf multistring matcher`() {
+    fun lixy_supports_anyOf_multistring_matcher() {
         val basicTokenType =
             tokenType()
         val multiTokenType =

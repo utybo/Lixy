@@ -1,32 +1,36 @@
-name: Tests
+name: JVM tests
 
 on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    env:
+      CC_TEST_REPORTER_ID: 426a8cba7a9651be2761a6f78bd46e622c0c4e2dd7d611e21b57154ff97ba5cc
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK 13
+    - name: Set up JDK 14
       uses: actions/setup-java@v1
       with:
-        java-version: 13
-    - name: Build with Gradle
-      run: chmod +x gradlew && ./gradlew build
-    - name: Test with gradle
-      run: ./gradlew check
-    - name: Code Climate upload test coverage
-      env:
-        CC_TEST_REPORTER_ID: 426a8cba7a9651be2761a6f78bd46e622c0c4e2dd7d611e21b57154ff97ba5cc
-        JACOCO_SOURCE_PATH: src/main/kotlin
+        java-version: 14
+    - name: Build
+      run: chmod +x gradlew && ./gradlew assemble
+    - name: Set up Code Climate test reporter
       run: |
         export GIT_COMMIT_SHA=${GITHUB_SHA}
         export GIT_BRANCH=${GITHUB_REF#refs/heads/}
         wget -O cc-test-reporter https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
         chmod +x cc-test-reporter
+    - name: Notify Code Climate before build
+      run: |
         ./cc-test-reporter before-build
-        ./gradlew test jacocoTestReport
-        ./cc-test-reporter format-coverage build/reports/jacoco/test/jacocoTestReport.xml --input-type jacoco
+    - name: Launch tests
+      run: ./gradlew jvmTest
+    - name: Generate test coverage report
+      run: ./gradlew jacocoTestReport
+    - name: Upload test coverage to Code Climate
+      env:
+        JACOCO_SOURCE_PATH: src/commonMain/kotlin src/jvmMain/kotlin
+      run: |
+        ./cc-test-reporter format-coverage build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
         ./cc-test-reporter upload-coverage

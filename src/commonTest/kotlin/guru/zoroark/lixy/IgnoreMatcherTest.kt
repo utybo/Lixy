@@ -1,11 +1,12 @@
 package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.anyOf
+import guru.zoroark.lixy.matchers.matches
 import kotlin.test.*
 
 class IgnoreMatcherTest {
     @Test
-    fun `Ignore matcher on string in single state`() {
+    fun ignore_matcher_on_string_in_single_state() {
         val tone = tokenType()
         val ttwo = tokenType()
         val lexer = lixy {
@@ -31,7 +32,7 @@ class IgnoreMatcherTest {
     }
 
     @Test
-    fun `Ignore matcher on string in multiple states`() {
+    fun ignore_matcher_on_string_in_multiple_states() {
         val tkey = tokenType()
         val tvalue = tokenType()
         val svalue = stateLabel()
@@ -63,7 +64,7 @@ class IgnoreMatcherTest {
     }
 
     @Test
-    fun `Ignore matcher on any matcher in single state`() {
+    fun ignore_matcher_on_any_matcher_in_single_state() {
         val tspace = tokenType()
         val tword = tokenType()
         val lexer = lixy {

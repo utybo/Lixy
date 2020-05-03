@@ -12,7 +12,7 @@ README | [CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](DOCUMENTATION.md)
 
 ## What is Lixy?
 
-Lixy is a ["lexer"](https://en.wikipedia.org/wiki/Lexical_analysis) framework. It is a library that allows you to turn a string into a sequence of tokens using rules that you define using a Kotlin DSL.
+Lixy is a ["lexer"](https://en.wikipedia.org/wiki/Lexical_analysis) framework, and is a Kotlin Multi-platform Project. It is a library that allows you to turn a string into a sequence of tokens using rules that you define using a Kotlin DSL.
 
 This lexical analysis is typically the first step when making a compiler of any kind.
 
@@ -108,5 +108,13 @@ val tokens = """Hello "Kotlin \"fans\"!" Hi"""
 ```
 
 There are a lot of possibilities!
+
+## Getting Lixy
+
+You can get the following artifacts from Jitpack:
+
+* Kotlin/JVM: `guru.zoroark.lixy:lixy-jvm:version`
+* Kotlin/JS: `guru.zoroark.lixy:lixy-js:version`
+* Kotlin MPP: `guru.zoroark.lixy:lixy:version`
 
 [![Zoroark](https://img.pokemondb.net/sprites/black-white/anim/normal/zoroark.gif)](https://zoroark.guru)

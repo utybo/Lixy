@@ -7,7 +7,7 @@ import kotlin.test.*
 class RepeatedRecognizerTest {
 
     @Test
-    fun `Repeated string recognizer test`() {
+    fun repeated_string_recognizer_test() {
         val thi = tokenType()
         val thello = tokenType()
         val lexer = lixy {
@@ -30,7 +30,7 @@ class RepeatedRecognizerTest {
     }
 
     @Test
-    fun `Repeated string recognizer with additional parameters test`() {
+    fun repeated_string_recognizer_with_additional_parameters_test() {
         val thi = tokenType()
         val thello = tokenType()
         val lexer = lixy {
@@ -66,7 +66,7 @@ class RepeatedRecognizerTest {
     }
 
     @Test
-    fun `Any repeated recognizer test`() {
+    fun any_repeated_recognizer_test() {
         val tgreet = tokenType()
         val ttest = tokenType()
         val lexer = lixy {
@@ -90,7 +90,7 @@ class RepeatedRecognizerTest {
     }
 
     @Test
-    fun `Any repeated recognizer with additional parameters test`() {
+    fun any_repeated_recognizer_with_additional_parameters_test() {
         val tgreet = tokenType()
         val ttest = tokenType()
         val lexer = lixy {

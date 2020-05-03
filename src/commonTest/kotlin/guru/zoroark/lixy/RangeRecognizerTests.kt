@@ -2,12 +2,12 @@ package guru.zoroark.lixy
 
 import guru.zoroark.lixy.matchers.anyOf
 import guru.zoroark.lixy.matchers.repeated
-import guru.zoroark.lixy.matchers.toRecognizer
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RangeRecognizerTests {
     @Test
-    fun `Range can be used as bare recognizer`() {
+    fun range_can_be_used_as_bare_recognizer() {
         val ta = tokenType()
         val tdigit = tokenType()
         val lexer = lixy {
@@ -42,7 +42,7 @@ class RangeRecognizerTests {
     }
 
     @Test
-    fun `Range can be used with repetition`() {
+    fun range_can_be_used_with_repetition() {
         val top = tokenType()
         val tsign = tokenType()
         val tnumber = tokenType()
