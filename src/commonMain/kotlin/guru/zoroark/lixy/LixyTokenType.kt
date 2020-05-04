@@ -12,7 +12,9 @@ interface LixyTokenType
  *
  * @property name A name for this token type, useful for debugging.
  */
-class LixyGenericTokenType(val name: String) : LixyTokenType
+class LixyGenericTokenType(val name: String) : LixyTokenType {
+    override fun toString(): String = "LixyGenericTokenType[$name]"
+}
 
 /**
  * Creates a new, distinct token type and returns it. The returned token type is
