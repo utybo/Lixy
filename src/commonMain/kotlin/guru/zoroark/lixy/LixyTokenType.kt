@@ -12,7 +12,7 @@ interface LixyTokenType
  *
  * @property name A name for this token type, useful for debugging.
  */
-data class LixyGenericTokenType(val name: String) : LixyTokenType
+class LixyGenericTokenType(val name: String) : LixyTokenType
 
 /**
  * Creates a new, distinct token type and returns it. The returned token type is
