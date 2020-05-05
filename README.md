@@ -2,7 +2,8 @@
 
 README | [CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](DOCUMENTATION.md)
 
-[![Actions Status](https://img.shields.io/github/workflow/status/utybo/Lixy/Tests?style=for-the-badge&logo=github&label=tests)](https://github.com/utybo/Lixy/actions)
+[![Actions Status JVM](https://img.shields.io/github/workflow/status/utybo/Lixy/JVM%20tests?style=for-the-badge&logo=github&label=tests%20(JVM))](https://github.com/utybo/Lixy/actions)
+[![Actions Status JS](https://img.shields.io/github/workflow/status/utybo/Lixy/JS%20tests?style=for-the-badge&logo=github&label=tests%20(JS))](https://github.com/utybo/Lixy/actions)
 [![Code Climate coverage](https://img.shields.io/codeclimate/coverage/utybo/Lixy?style=for-the-badge&logo=Code-Climate)](https://codeclimate.com/github/utybo/Lixy/test_coverage)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/utybo/Lixy?style=for-the-badge&logo=Code-Climate)](https://codeclimate.com/github/utybo/Lixy/maintainability)
 ![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blue?logo=Kotlin&style=for-the-badge)
@@ -15,6 +16,8 @@ README | [CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](DOCUMENTATION.md)
 Lixy is a ["lexer"](https://en.wikipedia.org/wiki/Lexical_analysis) framework, and is a Kotlin Multi-platform Project. It is a library that allows you to turn a string into a sequence of tokens using rules that you define using a Kotlin DSL.
 
 This lexical analysis is typically the first step when making a compiler of any kind.
+
+A lexer will only get you so far. The next step in the compilation is parsing, which [Pangoro](https://github.com/utybo/Pangoro) can help you with if you are using Lixy!
 
 ### A Kotlin DSL?
 
