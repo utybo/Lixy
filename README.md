@@ -1,13 +1,12 @@
 # [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy, the lexer with a beautiful Kotlin DSL
 
-README | [CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](DOCUMENTATION.md)
+**[CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](https://docs.zoroark.guru/#/lixy/)**
 
 [![Actions Status JVM](https://img.shields.io/github/workflow/status/utybo/Lixy/JVM%20tests?style=for-the-badge&logo=github&label=tests%20(JVM))](https://github.com/utybo/Lixy/actions)
 [![Actions Status JS](https://img.shields.io/github/workflow/status/utybo/Lixy/JS%20tests?style=for-the-badge&logo=github&label=tests%20(JS))](https://github.com/utybo/Lixy/actions)
 [![Code Climate coverage](https://img.shields.io/codeclimate/coverage/utybo/Lixy?style=for-the-badge&logo=Code-Climate)](https://codeclimate.com/github/utybo/Lixy/test_coverage)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/utybo/Lixy?style=for-the-badge&logo=Code-Climate)](https://codeclimate.com/github/utybo/Lixy/maintainability)
 ![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blue?logo=Kotlin&style=for-the-badge)
-
 
 ![Experimental](https://img.shields.io/badge/Stage-Experimental-red?style=flat-square) [![Release](https://jitpack.io/v/guru.zoroark/lixy.svg?style=flat-square)](https://jitpack.io/#guru.zoroark/lixy) You can get the latest release/commit on JitPack.
 
