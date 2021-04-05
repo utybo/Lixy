@@ -3,10 +3,12 @@ plugins {
     id "maven-publish"
     id "jacoco"
     //id "org.jetbrains.dokka" version "0.10.0"
+    id("io.gitlab.arturbosch.detekt").version("1.16.0")
 }
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 group = "guru.zoroark"
@@ -69,6 +71,18 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
+    }
+}
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
+}
+
+detekt {
+    input = files("src/commonMain/kotlin", "src/jvmMain/kotlin")
+
+    reports {
+        sarif.enabled = true
     }
 }
 

@@ -38,6 +38,12 @@ jobs:
       run: |
         ./cc-test-reporter format-coverage build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
         ./cc-test-reporter upload-coverage
+    - name: Run Detekt
+      run: |
+        ./gradlew detekt
+    - uses: github/codeql-action/upload-sarif@v
+      with:
+        sarif_file: build/reportsd/detekt/detekt.sarif
   js-tests:
     name: JS (Node) Tests
     runs-on: ubuntu-latest
