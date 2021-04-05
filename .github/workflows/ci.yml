@@ -29,6 +29,7 @@ jobs:
         ./cc-test-reporter before-build
     - name: Launch tests
       run: |
+        chmod +x gradlew
         ./gradlew jvmTest
         ./gradlew jacocoTestReport
     - name: Upload test coverage to Code Climate
@@ -46,7 +47,5 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build
-        run: chmod +x gradlew && ./gradlew assemble
       - name: Launch tests
-        run: ./gradlew jsTest
+        run: chmod +x gradlew  && ./gradlew jsTest
