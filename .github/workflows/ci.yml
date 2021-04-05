@@ -43,7 +43,7 @@ jobs:
       run: |
         ./gradlew detekt
     - uses: github/codeql-action/upload-sarif@v1
-      if: "${{ steps.runDetekt.outcome == 'failure' || steps.runDetekt.outcome == 'success' }}"
+      if: "${{ always() && (steps.runDetekt.outcome == 'failure' || steps.runDetekt.outcome == 'success') }}"
       with:
         sarif_file: build/reportsd/detekt/detekt.sarif
   js-tests:
