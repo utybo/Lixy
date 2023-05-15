@@ -1,3 +1,9 @@
+# Heads up!
+
+**Pangoro and Lixy have been replaced by [Tegal Niwen](https://tegral.zoroark.guru/docs/modules/core/niwen) ([GitHub](https://github.com/utybo/Tegral)).** This evolved version of Pangoro and Lixy feature parser type-safety, more expectations and matchers, an awesome execution debugger and much more! This repository will no longer be updated.
+
+## Previous README
+
 # [![Shinx](https://img.pokemondb.net/sprites/black-white/anim/normal/shinx.gif)](http://pokemondb.net/pokedex/shinx) Lixy, the lexer with a beautiful Kotlin DSL
 
 **[CHANGELOG](CHANGELOG.md) | [DOCUMENTATION](https://docs.zoroark.guru/#/lixy/)**
